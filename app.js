@@ -9,6 +9,8 @@ let categories = [
     "Rent",
     "Other"
 ];
+let trendChart;
+let chart;
 
 function saveCategories(){
 
@@ -211,10 +213,24 @@ function renderExpenses() {
     const totalAmountElement =
     document.getElementById("totalAmount");
 
+    document.getElementById(
+    "filteredBills"
+        ).innerText =
+            filteredExpenses.length;
+
+        document.getElementById(
+            "filteredAmount"
+        ).innerText =
+            `₹${total}`;
+
     if(totalAmountElement){
         totalAmountElement.innerText = total;
     }
     renderChart(categoryTotals);
+   
+    renderTrendChart(
+    filteredExpenses
+            );
 
     
 }
@@ -291,27 +307,107 @@ function viewImage(image){
 
 function editExpense(id){
 
-    const expense = expenses.find(
-        expense => expense.id === id
-    );
+    const expense =
+        expenses.find(
+            e => e.id === id
+        );
 
     if(!expense){
         return;
     }
 
-    document.getElementById("title").value =
+    document.getElementById(
+        "editId"
+    ).value =
+        expense.id;
+    document.getElementById(
+        "editCategory"
+    ).innerHTML =
+        document.getElementById(
+            "category"
+        ).innerHTML;
+    document.getElementById(
+        "editTitle"
+    ).value =
         expense.title;
 
-    document.getElementById("amount").value =
+    document.getElementById(
+        "editAmount"
+    ).value =
         expense.amount;
 
-    document.getElementById("category").value =
+    document.getElementById(
+        "editCategory"
+    ).value =
         expense.category;
 
-    document.getElementById("date").value =
-        expense.date.split("T")[0];
+    document.getElementById(
+        "editDate"
+    ).value =
+        expense.date;
 
-    editId = id;
+    document.getElementById(
+        "editModal"
+    ).style.display =
+        "block";
+}
+function closeModal(){
+
+    document.getElementById(
+        "editModal"
+    ).style.display =
+        "none";
+}
+
+async function saveEdit(){
+
+    const id =
+        Number(
+            document.getElementById(
+                "editId"
+            ).value
+        );
+
+    const expense =
+        expenses.find(
+            e => e.id === id
+        );
+
+    if(!expense){
+        return;
+    }
+
+    expense.title =
+        document.getElementById(
+            "editTitle"
+        ).value;
+
+    expense.amount =
+        Number(
+            document.getElementById(
+                "editAmount"
+            ).value
+        );
+
+    expense.category =
+        document.getElementById(
+            "editCategory"
+        ).value;
+
+    expense.date =
+        document.getElementById(
+            "editDate"
+        ).value;
+
+    await updateExpenseInSheet(
+        expense
+    );
+
+    saveExpenses();
+
+    renderExpenses();
+
+    closeModal();
 }
 
 function renderChart(categoryTotals){
@@ -353,6 +449,116 @@ function renderChart(categoryTotals){
         }
     });
 }
+function renderTrendChart(filteredExpenses){
+
+    const monthlyTotals = {};
+
+    expenses.forEach(expense => {
+
+        const month =
+            expense.date.substring(0, 7);
+
+        monthlyTotals[month] =
+            (monthlyTotals[month] || 0)
+            + expense.amount;
+    });
+
+    const labels =
+        Object.keys(monthlyTotals).sort();
+
+    const values =
+        labels.map(
+            month => monthlyTotals[month]
+        );
+
+    const canvas =
+        document.getElementById(
+            "trendChart"
+        );
+
+    if(!canvas){
+        return;
+    }
+
+    const ctx =
+        canvas.getContext("2d");
+
+    if(trendChart){
+        trendChart.destroy();
+    }
+
+    trendChart =
+        new Chart(ctx, {
+
+            type: "bar",
+
+            data: {
+
+                labels,
+
+                datasets: [
+
+                    {
+                        type: "bar",
+
+                        label: "Expenses",
+
+                        data: values,
+
+                        borderRadius: 8
+                    },
+
+                    {
+                        type: "line",
+
+                        label: "Trend",
+
+                        data: values,
+
+                        tension: 0.4,
+
+                        fill: false,
+
+                        pointRadius: 5
+                    }
+
+                ]
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                scales: {
+
+                    x: {
+
+                        offset: false,
+
+                        grid: {
+                            display: false
+                        }
+
+                    },
+
+                    y: {
+
+                        beginAtZero: true,
+
+                        grid: {
+                            display: false
+                        }
+
+                    }
+
+                }
+
+            }
+        });
+}
+
 
 function exportCSV() {
 
@@ -620,63 +826,159 @@ function exportPDF(){
     );
 
     // SUMMARY SECTION
+        function drawCard(
+            x,
+            y,
+            title,
+            value
+        ){
 
-    doc.setFontSize(14);
+            doc.setFillColor(
+                232,
+                245,
+                233
+            );
 
-    doc.text(
-        "Summary",
-        14,
-        45
-    );
+            doc.roundedRect(
+                x,
+                y,
+                42,
+                25,
+                3,
+                3,
+                "F"
+            );
 
-    doc.setFontSize(11);
+            doc.setFontSize(9);
 
-    doc.text(
-        `Total Bills: ${filteredExpenses.length}`,
-        14,
-        55
-    );
+            doc.setTextColor(
+                100
+            );
 
-    doc.text(
-        `Total Expenses: Rs. ${total}`,
-        14,
-        63
-    );
+            doc.text(
+                title,
+                x + 4,
+                y + 8
+            );
 
-    doc.text(
-        `Highest Category: ${highestCategory}`,
-        14,
-        71
-    );
+            doc.setFontSize(13);
 
-    doc.text(
-        `Average Expense: Rs. ${average}`,
-        14,
-        79
-    );
+            doc.setTextColor(
+                46,
+                125,
+                50
+            );
 
-    // TABLE
+            doc.text(
+                String(value),
+                x + 4,
+                y + 18
+            );
+        }
 
-    const chartElement =
-    document.querySelector(
-        ".chart-container"
-    );
+        
+        drawCard(
+            14,
+            45,
+            "Bills",
+            filteredExpenses.length
+        );
 
-html2canvas(chartElement)
-.then(canvas => {
+        drawCard(
+            60,
+            45,
+            "Expense",
+            `Rs. ${total}`
+        );
 
-    const imgData =
-        canvas.toDataURL("image/png");
+        drawCard(
+            14,
+            75,
+            "Category",
+            highestCategory
+        );
 
-    // Chart on top-right of page 1
-    doc.addImage(
-        imgData,
-        "PNG",
-        115,
-        30,
-        80,
-        60
-    );
+        drawCard(
+            60,
+            75,
+            "Average",
+            `Rs. ${average}`
+        );
+ 
+    if(chart){
+        chart.update();
+    }
+
+    if(trendChart){
+        trendChart.update();
+    }
+
+    const pieCanvas =
+        document.getElementById(
+            "expenseChart"
+        );
+
+    const trendCanvas =
+        document.getElementById(
+            "trendChart"
+        );
+
+    let pieImage = null;
+    let trendImage = null;
+
+    try{
+
+        pieImage =
+            pieCanvas.toDataURL(
+                "image/png"
+            );
+
+    }catch(err){
+
+        console.log(
+            "Pie Error:",
+            err
+        );
+    }
+
+    try{
+
+        trendImage =
+            trendCanvas.toDataURL(
+                "image/png"
+            );
+
+    }catch(err){
+
+        console.log(
+            "Trend Error:",
+            err
+        );
+    }
+
+    if(pieImage){
+
+        doc.addImage(
+            pieImage,
+            "PNG",
+            120,
+            25,
+            70,
+            50
+        );
+    }
+
+    if(trendImage){
+
+        doc.addImage(
+            trendImage,
+            "PNG",
+            15,
+            110,
+            180,
+            55
+        );
+    }
 
     const rows = [];
 
@@ -688,11 +990,12 @@ html2canvas(chartElement)
             expense.category,
             expense.date
         ]);
+
     });
 
     doc.autoTable({
 
-        startY: 100,
+        startY: 175,
 
         head: [[
             "Title",
@@ -702,25 +1005,113 @@ html2canvas(chartElement)
         ]],
 
         body: rows
+
     });
 
     doc.setFontSize(10);
 
     doc.text(
+
         `Generated On: ${
             new Date()
             .toLocaleString()
         }`,
+
         14,
+
         doc.lastAutoTable.finalY + 15
+
     );
 
     doc.save(
+
         selectedMonth
         ?
         `Expense-Report-${selectedMonth}.pdf`
         :
         "Expense-Report.pdf"
+
     );
-});
+
+
 }
+
+
+function showTab(tabId, button){
+
+    document
+        .querySelectorAll(".tab-content")
+        .forEach(tab => {
+
+            tab.style.display = "none";
+        });
+
+    document
+        .querySelectorAll(".tab-btn")
+        .forEach(btn => {
+
+            btn.classList.remove("active");
+        });
+
+    document
+        .getElementById(tabId)
+        .style.display = "block";
+
+    button.classList.add("active");
+}
+
+document.getElementById("date").value =
+    new Date()
+        .toISOString()
+        .split("T")[0];
+
+document.getElementById("monthFilter").value =
+    new Date()
+        .toISOString()
+        .slice(0, 7);
+
+
+function changeTheme(){
+
+    const selectedTheme =
+        document.getElementById(
+            "themeSelector"
+        ).value;
+
+    document.getElementById(
+        "themeStylesheet"
+    ).href = selectedTheme;
+
+    localStorage.setItem(
+        "selectedTheme",
+        selectedTheme
+    );
+}
+
+window.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        const savedTheme =
+            localStorage.getItem(
+                "selectedTheme"
+            );
+
+        if(savedTheme){
+
+            document.getElementById(
+                "themeStylesheet"
+            ).href = savedTheme;
+
+            const selector =
+                document.getElementById(
+                    "themeSelector"
+                );
+
+            if(selector){
+                selector.value =
+                    savedTheme;
+            }
+        }
+    }
+);

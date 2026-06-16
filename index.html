@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Monthly Bill Tracker</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link
+    id="themeStylesheet"
+    rel="stylesheet"
+    href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
-<body>
-
 <body>
 
 <div class="container">
@@ -21,96 +22,211 @@
     <div class="header">
 
         <div class="logo">
+
             💰 Monthly Bill Tracker
+
             <span>
                 Smart Expense Dashboard
             </span>
-        </div>
-
-        <div class="theme-toggle">
-
-            <span class="theme-label">
-                Theme
-            </span>
-
-            <label class="switch">
-
-                <input
-                    type="checkbox"
-                    id="themeSwitch"
-                    onchange="toggleTheme()">
-
-                <span class="slider"></span>
-
-            </label>
 
         </div>
+
+        <div class="header-controls">
+
+    <select
+        id="themeSelector"
+        onchange="changeTheme()">
+
+        <option value="style.css">
+            🟢 Claymorphism
+        </option>
+
+        <option value="skeuomorphism.css">
+            🟠 Skeuomorphism
+        </option>
+
+    </select>
+
+    <div class="theme-toggle">
+
+        <span class="theme-label">
+            Dark Mode
+        </span>
+
+        <label class="switch">
+
+            <input
+                type="checkbox"
+                id="themeSwitch"
+                onchange="toggleTheme()">
+
+            <span class="slider"></span>
+
+        </label>
 
     </div>
 
-    <!-- CATEGORY MANAGEMENT -->
+</div>
 
-    <div class="category-card">
+    </div>
 
-        <h3>
-            📂 Category Management
-        </h3>
+    <!-- TABS -->
 
-        <div class="category-section">
+    <div class="tabs">
+
+        <button
+            class="tab-btn active"
+            onclick="showTab('dashboardTab', this)">
+
+            📊 Dashboard
+
+        </button>
+
+        <button
+            class="tab-btn"
+            onclick="showTab('expensesTab', this)">
+
+            🧾 Expenses
+
+        </button>
+
+        <button
+            class="tab-btn"
+            onclick="showTab('settingsTab', this)">
+
+            ⚙️ Settings
+
+        </button>
+
+    </div>
+
+    <!-- DASHBOARD TAB -->
+
+    <div
+        id="dashboardTab"
+        class="tab-content">
+
+        <!-- ADD EXPENSE -->
+
+        <div class="expense-form">
 
             <input
                 type="text"
-                id="categoryInput"
-                placeholder="Add New Category">
+                id="title"
+                placeholder="Expense Name">
 
-            <button onclick="addCategory()">
-                ➕ Add
+            <input
+                type="number"
+                id="amount"
+                placeholder="Amount">
+
+            <select id="category">
+
+                <option value="">
+                    Select Category
+                </option>
+
+            </select>
+
+            <div class="field-group">
+
+                <input
+                    type="date"
+                    id="date">
+
+            </div>           
+
+            <input
+                type="file"
+                id="billPhoto"
+                accept="image/*">
+
+            <button onclick="addExpense()">
+                ➕ Add Expense
             </button>
 
-            <select id="categoryDelete"></select>
+        </div>
 
-            <button onclick="deleteCategory()">
-                🗑 Delete
-            </button>
+        <!-- DASHBOARD CARDS + PIE CHART -->
+
+        <div class="dashboard-section">
+
+            <div id="dashboard"></div>
+
+            <div class="chart-container">
+
+                <canvas id="expenseChart"></canvas>
+
+            </div>
 
         </div>
 
     </div>
 
-    <!-- EXPENSE FORM -->
+<!-- EXPENSES TAB -->
 
-    <div class="expense-form">
+<div
+    id="expensesTab"
+    class="tab-content"
+    style="display:none;">
 
-        <input
-            type="text"
-            id="title"
-            placeholder="Expense Name">
+    <!-- TREND GRAPH -->
 
-        <input
-            type="number"
-            id="amount"
-            placeholder="Amount">
+    <div class="trend-chart-container">
 
-        <select id="category">
+        <h3>📈 Monthly Expense Trend</h3>
 
-            <option value="">
-                Select Category
-            </option>
+        <div class="trend-wrapper">
 
-        </select>
+            <canvas id="trendChart"></canvas>
 
-        <input
-            type="date"
-            id="date">
+        </div>
 
-        <input
-            type="file"
-            id="billPhoto"
-            accept="image/*">
+    </div>
 
-        <button onclick="addExpense()">
-            ➕ Add Expense
-        </button>
+    <!-- SUMMARY CARDS -->
+
+    <div class="expenses-summary">
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+                📄
+            </div>
+
+            <div class="summary-content">
+
+                <span>
+                    Total Bills
+                </span>
+
+                <h2 id="filteredBills">
+                    0
+                </h2>
+
+            </div>
+
+        </div>
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+                💰
+            </div>
+
+            <div class="summary-content">
+
+                <span>
+                    Total Expenses
+                </span>
+
+                <h2 id="filteredAmount">
+                    ₹0
+                </h2>
+
+            </div>
+
+        </div>
 
     </div>
 
@@ -124,25 +240,14 @@
             placeholder="🔍 Search Expense..."
             onkeyup="renderExpenses()">
 
-        <input
-            type="month"
-            id="monthFilter"
-            onchange="renderExpenses()">
+        <div class="field-group">
 
-    </div>
-
-    <!-- DASHBOARD + CHART -->
-
-    <div class="dashboard-section">
-
-        <div id="dashboard"></div>
-
-        <div class="chart-container">
-
-            <canvas id="expenseChart"></canvas>
+            <input
+                type="month"
+                id="monthFilter"
+                onchange="renderExpenses()">
 
         </div>
-
     </div>
 
     <!-- EXPORT BUTTONS -->
@@ -188,10 +293,91 @@
 
 </div>
 
+    <!-- SETTINGS TAB -->
+
+    <div
+        id="settingsTab"
+        class="tab-content"
+        style="display:none;">
+
+        <div class="category-card">
+
+            <h3>
+                📂 Category Management
+            </h3>
+
+            <div class="category-section">
+
+                <input
+                    type="text"
+                    id="categoryInput"
+                    placeholder="Add New Category">
+
+                <button onclick="addCategory()">
+                    ➕ Add
+                </button>
+
+                <select id="categoryDelete"></select>
+
+                <button onclick="deleteCategory()">
+                    🗑 Delete
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<div id="editModal" class="modal">
+
+    <div class="modal-content">
+
+        <h2>
+            ✏️ Edit Expense
+        </h2>
+
+        <input
+            type="hidden"
+            id="editId">
+
+        <input
+            type="text"
+            id="editTitle"
+            placeholder="Expense Name">
+
+        <input
+            type="number"
+            id="editAmount"
+            placeholder="Amount">
+
+        <select id="editCategory"></select>
+
+        <input
+            type="date"
+            id="editDate">
+
+        <div class="modal-buttons">
+
+            <button onclick="saveEdit()">
+                Save
+            </button>
+
+            <button
+                class="delete-btn"
+                onclick="closeModal()">
+                Cancel
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script src="api.js"></script>
-
 <script src="app.js"></script>
 
 </body>
