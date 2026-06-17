@@ -12,6 +12,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body>
 
@@ -23,7 +26,8 @@
 
         <div class="logo">
 
-            💰 Monthly Bill Tracker
+            <i class="fa-solid fa-wallet"></i>
+            Monthly Bill Tracker
 
             <span>
                 Smart Expense Dashboard
@@ -31,8 +35,10 @@
 
         </div>
 
-        <div class="header-controls">
-
+    <div class="header-controls">
+        <span class="theme-label">
+                    Theme
+        </span>
     <select
         id="themeSelector"
         onchange="changeTheme()">
@@ -50,7 +56,7 @@
     <div class="theme-toggle">
 
         <span class="theme-label">
-            Dark Mode
+            Mode
         </span>
 
         <label class="switch">
@@ -78,7 +84,8 @@
             class="tab-btn active"
             onclick="showTab('dashboardTab', this)">
 
-            📊 Dashboard
+           <i class="fa-solid fa-chart-pie"></i>
+                Dashboard
 
         </button>
 
@@ -86,7 +93,8 @@
             class="tab-btn"
             onclick="showTab('expensesTab', this)">
 
-            🧾 Expenses
+                <i class="fa-solid fa-receipt"></i>
+                    Expenses
 
         </button>
 
@@ -94,7 +102,8 @@
             class="tab-btn"
             onclick="showTab('settingsTab', this)">
 
-            ⚙️ Settings
+             <i class="fa-solid fa-gear"></i>
+                Settings
 
         </button>
 
@@ -109,7 +118,7 @@
         <!-- ADD EXPENSE -->
 
         <div class="expense-form">
-
+            <h3>Add New Expense: </h3>
             <input
                 type="text"
                 id="title"
@@ -142,7 +151,8 @@
                 accept="image/*">
 
             <button onclick="addExpense()">
-                ➕ Add Expense
+                <i class="fa-solid fa-plus"></i>
+                Submit
             </button>
 
         </div>
@@ -153,15 +163,41 @@
 
             <div id="dashboard"></div>
 
-            <div class="chart-container">
+    <div class="chart-container">
 
-                <canvas id="expenseChart"></canvas>
+        <h3 class="chart-title">
+            <i class="fa-solid fa-chart-pie"></i>
 
-            </div>
+                Expense Distribution by Category
+        </h3>
 
-        </div>
+                <div class="chart-layout">
+
+                    <div class="chart-canvas">
+
+                        <canvas
+                            id="expenseChart">
+                        </canvas>
+
+                    </div>
+
+                    <div
+                        id="customLegend"
+                        class="chart-legend">
+                    </div>
+
+                    </div>
+
+                    <p
+                        id="pieChartSummary"
+                        class="pie-chart-summary">
+                    </p>
 
     </div>
+
+    </div>
+
+</div>
 
 <!-- EXPENSES TAB -->
 
@@ -174,7 +210,9 @@
 
     <div class="trend-chart-container">
 
-        <h3>📈 Monthly Expense Trend</h3>
+        <h3><i class="fa-solid fa-chart-line"></i>
+        Expense Distribution
+        </h3>
 
         <div class="trend-wrapper">
 
@@ -191,7 +229,7 @@
         <div class="summary-card">
 
             <div class="summary-icon">
-                📄
+                 <i class="fa-solid fa-file-invoice"></i>
             </div>
 
             <div class="summary-content">
@@ -207,11 +245,11 @@
             </div>
 
         </div>
-
+    
         <div class="summary-card">
 
             <div class="summary-icon">
-                💰
+                 <i class="fa-solid fa-sack-dollar"></i>
             </div>
 
             <div class="summary-content">
@@ -229,17 +267,69 @@
         </div>
 
     </div>
+    <div class="budget-progress-card">
+
+    <h3>
+        <i class="fa-solid fa-bullseye"></i>
+            Monthly Budget Progress
+    </h3>
+
+            <div class="progress-bar">
+
+                <div
+                    id="progressFill"
+                    class="progress-fill">
+
+                    <span id="progressText">
+                        0%
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="budget-details">
+
+                <div>
+                    Budget:
+                    <span id="budgetAmount">
+                        ₹0
+                    </span>
+                </div>
+
+                <div>
+                    Spent:
+                    <span id="spentAmount">
+                        ₹0
+                    </span>
+                </div>
+
+                <div>
+                    Remaining:
+                    <span id="remainingAmount">
+                        ₹0
+                    </span>
+                </div>
+
+                </div>
+
+            </div>
 
     <!-- FILTERS -->
 
     <div class="filter-section">
 
+        <div class="search-box">
+
+        <i class="fa-solid fa-magnifying-glass"></i>
+
         <input
             type="text"
             id="searchInput"
-            placeholder="🔍 Search Expense..."
+            placeholder="Search Expense..."
+            
             onkeyup="renderExpenses()">
-
+            </div>
         <div class="field-group">
 
             <input
@@ -255,11 +345,13 @@
     <div class="export-section">
 
         <button onclick="exportCSV()">
-            📊 Export CSV
+           <i class="fa-solid fa-file-csv"></i>
+            Export CSV
         </button>
 
         <button onclick="exportPDF()">
-            📄 Export PDF
+          <i class="fa-solid fa-file-pdf"></i>
+            Export PDF
         </button>
 
     </div>
@@ -303,7 +395,10 @@
         <div class="category-card">
 
             <h3>
-                📂 Category Management
+
+                <i class="fa-solid fa-folder-tree"></i>
+                Category Management
+
             </h3>
 
             <div class="category-section">
@@ -314,18 +409,51 @@
                     placeholder="Add New Category">
 
                 <button onclick="addCategory()">
-                    ➕ Add
+                    <i class="fa-solid fa-folder-plus"></i>
+                    Add Category
                 </button>
 
                 <select id="categoryDelete"></select>
 
                 <button onclick="deleteCategory()">
-                    🗑 Delete
+                   <i class="fa-solid fa-folder-minus"></i>
+                    Delete Category
                 </button>
 
             </div>
 
         </div>
+
+        <div class="budget-settings-card">
+
+            <h3>
+                <i class="fa-solid fa-bullseye"></i>
+                    Monthly Budget
+            </h3>
+
+            <p class="budget-desc">
+                Set your monthly spending target
+            </p>
+
+            <div class="budget-settings-row">
+
+                <input
+                    type="number"
+                    id="monthlyBudget"
+                    placeholder="Enter Budget Amount">
+
+                <button
+                    onclick="saveBudget()">
+
+                    <i class="fa-solid fa-floppy-disk"></i>
+                        Save Budget
+
+                </button>
+
+            </div>
+
+        </div>
+
 
     </div>
 
@@ -335,7 +463,9 @@
     <div class="modal-content">
 
         <h2>
-            ✏️ Edit Expense
+           <i class="fa-solid fa-pen-to-square"></i>
+
+            Edit Expense
         </h2>
 
         <input

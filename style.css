@@ -135,7 +135,10 @@ body{
         10px 10px 22px #d7e5d7,
         -10px -10px 22px #ffffff;
 }
-
+.expense-form h3{
+    color:#2e7d32;
+    
+}
 /* INPUTS */
 
 input,
@@ -173,6 +176,8 @@ button{
     background:#4caf50;
 
     color:white;
+
+    font-weight: 700;
 
     transition:.3s;
 }
@@ -250,26 +255,167 @@ button:hover{
 
 /* PIE CHART */
 
+/* PIE CHART - CLAYMORPHISM */
+
 .chart-container{
 
     padding:25px;
 
     border-radius:25px;
 
+    height:450px;
+
     background:#eef7ee;
 
     box-shadow:
         10px 10px 22px #d7e5d7,
         -10px -10px 22px #ffffff;
+}
 
-    height:400px;
-    
+.dark-mode .chart-container{
+
+    background:#242b24;
+
+    box-shadow:
+        8px 8px 18px #111,
+        -8px -8px 18px #2f372f;
+}
+
+.chart-title{
+
+    text-align:center;
+
+    margin-bottom:20px;
+
+    font-size:20px;
+
+    font-weight:700;
+
+    color:#2e7d32;
+}
+
+.dark-mode .chart-title{
+
+    color:#66bb6a;
+}
+
+.chart-layout{
+
+    display:grid;
+
+    grid-template-columns:
+        1fr 220px;
+
+    align-items:center;
+
+    gap:30px;
+
+    height:300px;
+}
+
+.chart-canvas{
+
+    position:relative;
+
+    height:100%;
+
     display:flex;
 
     justify-content:center;
 
     align-items:center;
 }
+
+.chart-legend{
+
+    width:220px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+}
+
+.legend-item{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:10px 12px;
+
+    border-radius:14px;
+
+    background:#eef7ee;
+
+    box-shadow:
+        inset 3px 3px 8px #d7e5d7,
+        inset -3px -3px 8px #ffffff;
+}
+
+.dark-mode .legend-item{
+
+    background:#2d352d;
+
+    box-shadow:
+        inset 3px 3px 8px #171c17,
+        inset -3px -3px 8px #374137;
+}
+
+.legend-item span:last-child{
+
+    line-height:1.4;
+
+    color:#2e3b2e;
+
+    font-weight:600;
+}
+
+.dark-mode .legend-item span:last-child{
+
+    color:white;
+}
+
+.legend-color{
+
+    width:18px;
+
+    height:18px;
+
+    border-radius:50%;
+
+    flex-shrink:0;
+}
+
+.pie-chart-summary{
+
+    margin-top:15px;
+
+    padding-top:15px;
+
+    text-align:center;
+
+    font-weight:600;
+
+    line-height:1.8;
+
+    color:#2e7d32;
+
+    border-top:
+        1px solid rgba(0,0,0,.08);
+}
+
+.dark-mode .pie-chart-summary{
+
+    color:#66bb6a;
+
+    border-top:
+        1px solid rgba(255,255,255,.08);
+}
+
 #expenseChart{
 
     max-width:320px !important;
@@ -278,6 +424,7 @@ button:hover{
 
     margin:auto;
 }
+
 .chart-container canvas{
 
     margin:auto !important;
@@ -298,6 +445,10 @@ button:hover{
         -10px -10px 22px #ffffff;
 
     margin-bottom:25px;
+}
+.trend-chart-container h3{
+    color:#2e7d32;
+    padding-bottom: 20px;
 }
 
 .trend-wrapper{
@@ -343,7 +494,7 @@ button:hover{
     border-radius:25px;
 
     background:#eef7ee;
-
+    font-weight:700;
     box-shadow:
         10px 10px 22px #d7e5d7,
         -10px -10px 22px #ffffff;
@@ -576,6 +727,10 @@ input:checked + .slider:after{
         -8px -8px 18px #2f372f;
 }
 
+.dark-mode .expense-form h3{
+    color: #57ca5d;
+}
+
 .dark-mode input,
 .dark-mode select{
 
@@ -796,4 +951,302 @@ input:checked + .slider:after{
     background:#2d352d;
 
     color:white;
+}
+
+/* BUDGET PROGRESS */
+
+.budget-progress-card{
+
+    padding:25px;
+
+    margin-bottom:25px;
+
+    border-radius:25px;
+
+    background:#eef7ee;
+
+    box-shadow:
+        10px 10px 22px #d7e5d7,
+        -10px -10px 22px #ffffff;
+}
+
+.budget-progress-card h3{
+
+    color:#2e7d32;
+
+    margin-bottom:15px;
+}
+
+.progress-bar{
+
+    width:100%;
+
+    height:22px;
+
+    overflow:hidden;
+
+    border-radius:50px;
+
+    background:#eef7ee;
+
+    box-shadow:
+        inset 4px 4px 8px #d7e5d7,
+        inset -4px -4px 8px #ffffff;
+
+    margin:15px 0;
+}
+
+.progress-fill{
+
+    width:0;
+
+    height:100%;
+
+    border-radius:50px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #4caf50,
+            #81c784
+        );
+
+    transition:.5s ease;
+}
+
+.budget-details{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fit,minmax(180px,1fr));
+
+    gap:15px;
+    font-weight:700;
+    margin-top:15px;
+}
+
+.budget-item{
+
+    padding:15px;
+
+    border-radius:18px;
+
+    text-align:center;
+
+    background:#eef7ee;
+
+    box-shadow:
+        inset 4px 4px 8px #d7e5d7,
+        inset -4px -4px 8px #ffffff;
+}
+
+.budget-item span{
+
+    display:block;
+
+    color:#777;
+
+    font-weight:700;
+
+    margin-bottom:5px;
+}
+
+.budget-item h4{
+
+    color:#2e7d32;
+
+    font-size:22px;
+    
+    font-size:24px;
+
+    font-weight:800;
+}
+
+.dark-mode .budget-progress-card{
+
+    background:#242b24;
+
+    box-shadow:
+        8px 8px 18px #111,
+        -8px -8px 18px #2f372f;
+}
+
+.dark-mode .progress-bar{
+
+    background:#2d352d;
+
+    box-shadow:
+        inset 4px 4px 8px #171c17,
+        inset -4px -4px 8px #374137;
+}
+
+.dark-mode .budget-item{
+
+    background:#2d352d;
+
+    box-shadow:
+        inset 4px 4px 8px #171c17,
+        inset -4px -4px 8px #374137;
+}
+
+.dark-mode .budget-item h4{
+
+    color:#81c784;
+}
+
+.progress-fill{
+
+    position:relative;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:flex-end;
+
+    padding-right:10px;
+
+    overflow:visible;
+}
+
+#progressText{
+
+    color:rgb(244, 215, 215);
+
+    font-size:12px;
+
+    font-weight:700;
+
+    white-space:nowrap;
+}
+
+.budget-settings-card{
+
+    padding:25px;
+
+    margin-top:25px;
+
+    border-radius:25px;
+
+    background:#eef7ee;
+
+    box-shadow:
+        10px 10px 22px #d7e5d7,
+        -10px -10px 22px #ffffff;
+}
+
+.budget-settings-card h3{
+
+    color:#2e7d32;
+
+    margin-bottom:8px;
+}
+
+.budget-desc{
+
+    color:#777;
+
+    margin-bottom:18px;
+
+    font-size:14px;
+}
+
+.budget-settings-row{
+
+    display:flex;
+
+    gap:15px;
+
+    align-items:center;
+}
+
+.dark-mode .budget-settings-card{
+
+    background:#242b24;
+
+    box-shadow:
+        8px 8px 18px #111,
+        -8px -8px 18px #2f372f;
+}
+
+.dark-mode .budget-desc{
+
+    color:#bbb;
+}
+
+.dark-mode .budget-settings-card h3{
+
+    color:#f3f7f4;
+
+    margin-bottom:8px;
+}
+
+.pie-chart-summary{
+
+    text-align:center;
+
+    margin-top:15px;
+
+    font-weight:600;
+
+    line-height:1.8;
+}
+
+.fa-solid{
+
+    margin-right:8px;
+}
+
+.summary-icon{
+
+    font-size:36px;
+
+    color:#4caf50;
+}
+
+.dark-mode .summary-icon{
+
+    color:#66bb6a;
+}
+
+.search-box{
+
+    position:relative;
+
+    width:100%;
+}
+
+.search-box i{
+
+    position:absolute;
+
+    left:15px;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    color:#777;
+
+    z-index:1;
+}
+
+.search-box input{
+
+    width:100%;
+
+    padding-left:45px;
+}
+
+.search-box i{
+
+    color:#4caf50;
+}
+
+.modal-content h3 i{
+
+    color:#4caf50;
+
+    margin-right:8px;
 }

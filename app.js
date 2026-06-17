@@ -11,7 +11,6 @@ let categories = [
 ];
 let trendChart;
 let chart;
-
 function saveCategories(){
 
     localStorage.setItem(
@@ -71,7 +70,7 @@ async function addExpense() {
         saveExpenses();
 
         renderExpenses();
-
+        renderDashboard();
         clearForm();
 
         editId = null;
@@ -96,7 +95,7 @@ async function addExpense() {
     saveExpenses();
 
     renderExpenses();
-
+    renderDashboard();
     clearForm();
 }
 
@@ -105,8 +104,6 @@ function renderExpenses() {
     const table =
         document.getElementById("expenseTable");
 
-    const dashboard =
-        document.getElementById("dashboard");
 
     const searchText =
         document.getElementById("searchInput")
@@ -118,7 +115,7 @@ function renderExpenses() {
             ?.value || "";
 
     table.innerHTML = "";
-    dashboard.innerHTML = "";
+    
 
     let total = 0;
     let billCount = 0;
@@ -187,31 +184,82 @@ function renderExpenses() {
         `;
     });
 
-    dashboard.innerHTML += `
-        <div class="card">
-            <h3>Total Bills</h3>
-            <p>${filteredExpenses.length}</p>
-        </div>
-        `;
-    dashboard.innerHTML += `
-        <div class="card">
-            <h3>Total Expenses</h3>
-            <p>₹${total}</p>
-        </div>
-    `;
 
-    for(const category in categoryTotals){
-
-        dashboard.innerHTML += `
-            <div class="card">
-                <h3>${category}</h3>
-                <p>₹${categoryTotals[category]}</p>
-            </div>
-        `;
-    }
 
     const totalAmountElement =
     document.getElementById("totalAmount");
+
+    const budget =
+                Number(
+                    localStorage.getItem(
+                        "monthlyBudget"
+                    )
+                ) || 0;
+
+            const remaining =
+                budget - total;
+                
+        const actualPercent =
+            budget > 0
+            ?
+            (total / budget) * 100
+            :
+            0;
+
+        const displayPercent =
+            Math.min(
+                actualPercent,
+                100
+            );
+
+        const progressFill =
+            document.getElementById(
+                "progressFill"
+            );
+
+        progressFill.style.width =
+            `${displayPercent}%`;
+
+        document.getElementById(
+            "progressText"
+        ).innerText =
+            `${Math.round(actualPercent)}%`;
+
+        /* Progress Bar Colors */
+
+        if(actualPercent > 100){
+
+            progressFill.style.background =
+                "#e53935";
+        }
+        else if(actualPercent > 80){
+
+            progressFill.style.background =
+                "#ff9800";
+        }
+        else{
+
+            progressFill.style.background =
+                "#4caf50";
+        }
+
+        /* Budget Details */
+
+        document.getElementById(
+            "budgetAmount"
+        ).innerText =
+            `₹${budget}`;
+
+        document.getElementById(
+            "spentAmount"
+        ).innerText =
+            `₹${total}`;
+
+        document.getElementById(
+            "remainingAmount"
+        ).innerText =
+            `₹${remaining}`;
+
 
     document.getElementById(
     "filteredBills"
@@ -226,7 +274,7 @@ function renderExpenses() {
     if(totalAmountElement){
         totalAmountElement.innerText = total;
     }
-    renderChart(categoryTotals);
+    
    
     renderTrendChart(
     filteredExpenses
@@ -256,6 +304,7 @@ async function deleteExpense(id){
     saveExpenses();
 
     renderExpenses();
+    renderDashboard();
 }
 
 function clearForm(){
@@ -280,6 +329,7 @@ const storedExpenses =
 if (storedExpenses) {
     expenses = JSON.parse(storedExpenses);
     renderExpenses();
+    renderDashboard();
 }
 
 function getBase64(file) {
@@ -299,10 +349,39 @@ function getBase64(file) {
 
 function viewImage(image){
 
-    window.open(
-        image,
-        "_blank"
-    );
+    const newWindow =
+        window.open(
+            "",
+            "_blank"
+        );
+
+    newWindow.document.write(`
+        <html>
+            <head>
+                <title>Bill Image</title>
+            </head>
+
+            <body style="
+                margin:0;
+                background:#111;
+                display:flex;
+                justify-content:center;
+                align-items:center;
+                height:100vh;
+            ">
+
+                <img
+                    src="${image}"
+                    style="
+                        max-width:95%;
+                        max-height:95%;
+                        border-radius:10px;
+                    "
+                >
+
+            </body>
+        </html>
+    `);
 }
 
 function editExpense(id){
@@ -406,16 +485,19 @@ async function saveEdit(){
     saveExpenses();
 
     renderExpenses();
+    renderDashboard();
 
     closeModal();
 }
 
 function renderChart(categoryTotals){
 
-    const ctx =
-        document.getElementById("expenseChart");
+    const canvas =
+        document.getElementById(
+            "expenseChart"
+        );
 
-    if(!ctx){
+    if(!canvas){
         return;
     }
 
@@ -423,16 +505,146 @@ function renderChart(categoryTotals){
         expenseChart.destroy();
     }
 
-    expenseChart = new Chart(ctx, {
+    const labels =
+        Object.keys(categoryTotals);
+
+    const values =
+        Object.values(categoryTotals);
+
+    const total =
+        values.reduce(
+            (a,b) => a + b,
+            0
+        );
+const ctx =
+    canvas.getContext("2d");
+
+const gradients = [];
+
+/* Green */
+
+const g1 =
+    ctx.createLinearGradient(
+        0,0,300,300
+    );
+
+g1.addColorStop(
+    0,
+    "#7ddd82"
+);
+
+g1.addColorStop(
+    1,
+    "#2E7D32"
+);
+
+gradients.push(g1);
+
+/* Blue */
+
+const g2 =
+    ctx.createLinearGradient(
+        0,0,300,300
+    );
+
+g2.addColorStop(
+    0,
+    "#64B5F6"
+);
+
+g2.addColorStop(
+    1,
+    "#1565C0"
+);
+
+gradients.push(g2);
+
+/* Orange */
+
+const g3 =
+    ctx.createLinearGradient(
+        0,0,300,300
+    );
+
+g3.addColorStop(
+    0,
+    "#FFB74D"
+);
+
+g3.addColorStop(
+    1,
+    "#EF6C00"
+);
+
+gradients.push(g3);
+
+/* Pink */
+
+const g4 =
+    ctx.createLinearGradient(
+        0,0,300,300
+    );
+
+g4.addColorStop(
+    0,
+    "#e77d7d"
+);
+
+g4.addColorStop(
+    1,
+    "#f10a0a"
+);
+
+gradients.push(g4);
+/*  const colors = [
+
+//     "#81C784",
+//     "#64B5F6",
+//     "#9575CD",
+//     "#F06292",
+//     "#FFB74D",
+//     "#4DB6AC",
+//     "#A1887F"
+
+ ]; */
+
+const legendGradients = [
+
+    "linear-gradient(135deg,#81C784,#2E7D32)",
+
+    "linear-gradient(135deg,#64B5F6,#1565C0)",
+
+    "linear-gradient(135deg,#FFB74D,#EF6C00)",
+
+    "linear-gradient(135deg,#F48FB1,#C2185B)",
+
+    "linear-gradient(135deg,#4DB6AC,#00695C)",
+
+    "linear-gradient(135deg,#9575CD,#4527A0)",
+
+    "linear-gradient(135deg,#A1887F,#5D4037)"
+];
+
+    expenseChart =
+        new Chart(canvas, {
 
         type: "pie",
 
         data: {
 
-            labels: Object.keys(categoryTotals),
+            labels: labels,
 
             datasets: [{
-                data: Object.values(categoryTotals)
+
+                data: values,
+
+                backgroundColor: gradients,
+
+                borderWidth: 0.5,
+
+                hoverOffset: 5,
+
+                radius: "95%",
             }]
         },
 
@@ -440,15 +652,107 @@ function renderChart(categoryTotals){
 
             responsive: true,
 
+            maintainAspectRatio: false,
+
             plugins: {
 
+                title: {
+
+                    display: false
+                },
+
                 legend: {
-                    position: "bottom"
+
+                    display: false
+                },
+
+                tooltip: {
+
+                    callbacks: {
+
+                        label: function(context){
+
+                            const value =
+                                context.raw;
+
+                            const percent =
+                                (
+                                    value /
+                                    total
+                                ) * 100;
+
+                            return `${context.label}: ₹${value} (${percent.toFixed(1)}%)`;
+                        }
+                    }
                 }
             }
         }
     });
+
+    /* CUSTOM LEGEND */
+
+    const legend =
+        document.getElementById(
+            "customLegend"
+        );
+
+    if(legend){
+
+        legend.innerHTML = "";
+
+        labels.forEach(
+            (label,index) => {
+
+            const percent =
+                (
+                    values[index] /
+                    total
+                ) * 100;
+
+            legend.innerHTML += `
+
+                <div class="legend-item">
+
+                    <span
+                        class="legend-color"
+                        style="
+                            background:${legendGradients[index]};
+                        ">
+                    </span>
+
+                    <span>
+                        ${label}
+                        (${percent.toFixed(1)}%)
+                    </span>
+
+                </div>
+
+            `;
+        });
+    }
+
+    /* SUMMARY */
+
+    const summary =
+        document.getElementById(
+            "pieChartSummary"
+        );
+
+    if(summary){
+
+        const maxIndex =
+            values.indexOf(
+                Math.max(...values)
+            );
+
+        summary.innerHTML = `
+            <strong>Total Expenses:</strong> ₹${total}
+            &nbsp;&nbsp;|&nbsp;&nbsp;
+            <strong>Top Category:</strong> ${labels[maxIndex]}
+        `;
+    }
 }
+
 function renderTrendChart(filteredExpenses){
 
     const monthlyTotals = {};
@@ -772,11 +1076,9 @@ function exportPDF(){
 
         total += expense.amount;
 
-        if(categoryTotals[expense.category]){
-            categoryTotals[expense.category] += expense.amount;
-        }else{
-            categoryTotals[expense.category] = expense.amount;
-        }
+        categoryTotals[expense.category] =
+            (categoryTotals[expense.category] || 0)
+            + expense.amount;
     });
 
     let highestCategory = "-";
@@ -803,17 +1105,34 @@ function exportPDF(){
         :
         0;
 
-    // HEADER
+    /* HEADER */
+    doc.setFont(
+        "helvetica",
+        "bold"
+    );
 
     doc.setFontSize(20);
+
+    doc.setTextColor(
+    255,
+    152,
+    0
+    );
 
     doc.text(
         "Expense Report",
         14,
         20
     );
+    /* month */
 
-    doc.setFontSize(11);
+    doc.setFont(
+        "helvetica",
+        "bold"
+    );
+    doc.setFontSize(15);
+
+    doc.setTextColor(80);
 
     doc.text(
         selectedMonth
@@ -825,121 +1144,117 @@ function exportPDF(){
         30
     );
 
-    // SUMMARY SECTION
-        function drawCard(
+    /* SUMMARY CARD FUNCTION */
+
+    function drawCard(
+        x,
+        y,
+        title,
+        value
+    ){
+
+        doc.setFillColor(
+            232,
+            245,
+            233
+        );
+
+        doc.roundedRect(
             x,
             y,
+            38,
+            25,
+            3,
+            3,
+            "F"
+        );
+         doc.setFont(
+        "helvetica",
+        "bold"
+        );
+        doc.setFontSize(13);
+
+        doc.setTextColor(100);
+
+        doc.text(
             title,
-            value
-        ){
-
-            doc.setFillColor(
-                232,
-                245,
-                233
-            );
-
-            doc.roundedRect(
-                x,
-                y,
-                42,
-                25,
-                3,
-                3,
-                "F"
-            );
-
-            doc.setFontSize(9);
-
-            doc.setTextColor(
-                100
-            );
-
-            doc.text(
-                title,
-                x + 4,
-                y + 8
-            );
-
-            doc.setFontSize(13);
-
-            doc.setTextColor(
-                46,
-                125,
-                50
-            );
-
-            doc.text(
-                String(value),
-                x + 4,
-                y + 18
-            );
-        }
-
-        
-        drawCard(
-            14,
-            45,
-            "Bills",
-            filteredExpenses.length
+            x + 4,
+            y + 8
         );
 
-        drawCard(
-            60,
-            45,
-            "Expense",
-            `Rs. ${total}`
+        doc.setFontSize(13);
+
+        doc.setTextColor(
+            46,
+            125,
+            50
         );
 
-        drawCard(
-            14,
-            75,
-            "Category",
-            highestCategory
+        doc.text(
+            String(value),
+            x + 4,
+            y + 18
         );
-
-        drawCard(
-            60,
-            75,
-            "Average",
-            `Rs. ${average}`
-        );
- 
-    if(chart){
-        chart.update();
     }
+
+    /* SUMMARY CARDS */
+
+    drawCard(
+        10,
+        40,
+        "Bills",
+        filteredExpenses.length
+    );
+
+    drawCard(
+        58,
+        40,
+        "Expense",
+        `Rs. ${total}`
+    );
+
+    drawCard(
+        106,
+        40,
+        "Category",
+        highestCategory
+    );
+
+    drawCard(
+        154,
+        40,
+        "Average",
+        `Rs. ${average}`
+    );
+
+    /* TREND CHART TITLE */
+
+    doc.setFontSize(14);
+
+    doc.setTextColor(
+        46,
+        125,
+        50
+    );
+
+    doc.text(
+        "Monthly Expense Trend",
+        14,
+        80
+    );
+
+    /* UPDATE CHART */
 
     if(trendChart){
         trendChart.update();
     }
-
-    const pieCanvas =
-        document.getElementById(
-            "expenseChart"
-        );
 
     const trendCanvas =
         document.getElementById(
             "trendChart"
         );
 
-    let pieImage = null;
     let trendImage = null;
-
-    try{
-
-        pieImage =
-            pieCanvas.toDataURL(
-                "image/png"
-            );
-
-    }catch(err){
-
-        console.log(
-            "Pie Error:",
-            err
-        );
-    }
 
     try{
 
@@ -956,17 +1271,7 @@ function exportPDF(){
         );
     }
 
-    if(pieImage){
-
-        doc.addImage(
-            pieImage,
-            "PNG",
-            120,
-            25,
-            70,
-            50
-        );
-    }
+    /* ADD CHART */
 
     if(trendImage){
 
@@ -974,41 +1279,80 @@ function exportPDF(){
             trendImage,
             "PNG",
             15,
-            110,
+            85,
             180,
             55
         );
     }
+
+    /* TABLE TITLE */
+
+    doc.setFontSize(14);
+
+    doc.setTextColor(
+        46,
+        125,
+        50
+    );
+
+    doc.text(
+        "Expense Details",
+        14,
+        150
+    );
+
+    /* TABLE DATA */
 
     const rows = [];
 
     filteredExpenses.forEach(expense => {
 
         rows.push([
-            expense.title,
-            `Rs. ${expense.amount}`,
-            expense.category,
-            expense.date
-        ]);
 
+            expense.title,
+
+            `Rs. ${expense.amount}`,
+
+            expense.category,
+
+            expense.date
+
+        ]);
     });
 
     doc.autoTable({
 
-        startY: 175,
+        startY: 155,
 
         head: [[
+
             "Title",
+
             "Amount",
+
             "Category",
+
             "Date"
+
         ]],
 
-        body: rows
+        body: rows,
 
+        headStyles: {
+
+            fillColor: [
+                76,
+                175,
+                80
+            ]
+        }
     });
 
+    /* FOOTER */
+
     doc.setFontSize(10);
+
+    doc.setTextColor(120);
 
     doc.text(
 
@@ -1023,6 +1367,8 @@ function exportPDF(){
 
     );
 
+    /* SAVE */
+
     doc.save(
 
         selectedMonth
@@ -1032,8 +1378,6 @@ function exportPDF(){
         "Expense-Report.pdf"
 
     );
-
-
 }
 
 
@@ -1115,3 +1459,71 @@ window.addEventListener(
         }
     }
 );
+
+function renderDashboard(){
+
+    const dashboard =
+        document.getElementById(
+            "dashboard"
+        );
+
+    dashboard.innerHTML = "";
+
+    let total = 0;
+
+    const categoryTotals = {};
+
+    expenses.forEach(expense => {
+
+        total += expense.amount;
+
+        categoryTotals[expense.category] =
+            (categoryTotals[expense.category] || 0)
+            + expense.amount;
+
+    });
+
+    dashboard.innerHTML += `
+        <div class="card">
+            <h3>Total Bills</h3>
+            <p>${expenses.length}</p>
+        </div>
+    `;
+
+    dashboard.innerHTML += `
+        <div class="card">
+            <h3>Total Expenses</h3>
+            <p>₹${total}</p>
+        </div>
+    `;
+
+    for(const category in categoryTotals){
+
+        dashboard.innerHTML += `
+            <div class="card">
+                <h3>${category}</h3>
+                <p>₹${categoryTotals[category]}</p>
+            </div>
+        `;
+    }
+
+    renderChart(
+        categoryTotals
+    );
+}
+function saveBudget(){
+
+    const budget =
+        Number(
+            document.getElementById(
+                "monthlyBudget"
+            ).value
+        );
+
+    localStorage.setItem(
+        "monthlyBudget",
+        budget
+    );
+
+    renderExpenses();
+}
