@@ -172,21 +172,30 @@ button{
 
 @media(max-width:768px){
 
-    .summary-cards{
+    .expenses-summary{
 
-        display:grid !important;
+        display:grid;
 
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr)) !important;
+        grid-template-columns:repeat(2,1fr);
 
-        gap:12px !important;
+        gap:12px;
     }
 
     .summary-card{
 
-        width:auto !important;
+        padding:15px;
 
-        min-width:0 !important;
+        gap:10px;
+    }
+
+    .summary-content h2{
+
+        font-size:22px;
+    }
+
+    .summary-icon{
+
+        font-size:30px;
     }
 }
 
@@ -1300,4 +1309,59 @@ input:not(:checked) + .slider .sun-icon{
 .chart-container canvas{
 
     margin:auto !important;
+}
+
+/* ===== Layout fixes synced with style.css ===== */
+
+@media(max-width:768px){
+    body{
+        padding:10px;
+    }
+}
+
+@media(max-width:768px){
+
+    #dashboard{
+        grid-template-columns:repeat(2,1fr) !important;
+        gap:12px;
+    }
+
+    .card{
+        min-width:0;
+        padding:15px;
+    }
+
+    .card h3{
+        font-size:14px;
+    }
+
+    .card p{
+        font-size:22px;
+    }
+}
+
+@media(max-width:768px){
+
+    .header{
+        flex-direction:column;
+        gap:15px;
+        text-align:center;
+    }
+
+
+
+    #themeSelector{
+        width:100%;
+        min-width:unset;
+    }
+
+    .theme-toggle{
+        justify-content:center;
+    }
+
+    .tagLine{
+        font-size:24px;
+        text-align:center;
+        word-break:break-word;
+    }
 }
