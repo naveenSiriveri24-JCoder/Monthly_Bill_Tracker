@@ -519,40 +519,43 @@ function getBase64(file) {
 
 function viewImage(image){
 
-    const newWindow =
-        window.open(
-            "",
-            "_blank"
-        );
+    document.getElementById(
+        "modalImage"
+    ).src = image;
 
-    newWindow.document.write(`
-        <html>
-            <head>
-                <title>Bill Image</title>
-            </head>
-
-            <body style="
-                margin:0;
-                background:#111;
-                display:flex;
-                justify-content:center;
-                align-items:center;
-                height:100vh;
-            ">
-
-                <img
-                    src="${image}"
-                    style="
-                        max-width:95%;
-                        max-height:95%;
-                        border-radius:10px;
-                    "
-                >
-
-            </body>
-        </html>
-    `);
+    document.getElementById(
+        "imageModal"
+    ).style.display = "flex";
 }
+
+document.getElementById(
+    "closeImageModal"
+).addEventListener(
+    "click",
+    function(){
+
+        document.getElementById(
+            "imageModal"
+        ).style.display =
+            "none";
+    }
+);
+
+document.getElementById(
+    "imageModal"
+).addEventListener(
+    "click",
+    function(e){
+
+        if(
+            e.target === this
+        ){
+
+            this.style.display =
+                "none";
+        }
+    }
+);
 
 function editExpense(id){
 
@@ -970,17 +973,17 @@ const gradient =
 
 gradient.addColorStop(
     0,
-    "#eda96a"
+    "#7d97f5"
 );
 
 gradient.addColorStop(
     .5,
-    "#e68038"
+    "#3b38e6"
 );
 
 gradient.addColorStop(
     1,
-    "#f37b11"
+    "#114df3"
 );
 
 const gradient2 =
@@ -993,12 +996,12 @@ const gradient2 =
 
 gradient2.addColorStop(
     0,
-    "#d3a706"
+    "#f57818"
 );
 
 gradient2.addColorStop(
     1,
-    "#1f8203"
+    "#ff776a"
 );
     trendChart =
         new Chart(ctx, {
@@ -1903,3 +1906,146 @@ document
             }
         );
     });
+
+ const uploadArea =
+    document.getElementById(
+        "uploadArea"
+    );
+
+const billPhoto =
+    document.getElementById(
+        "billPhoto"
+    );
+
+const previewContainer =
+    document.getElementById(
+        "previewContainer"
+    );
+
+const previewImage =
+    document.getElementById(
+        "previewImage"
+    );
+
+const fileName =
+    document.getElementById(
+        "fileName"
+    );
+
+const removeImage =
+    document.getElementById(
+        "removeImage"
+    );
+
+/* CLICK TO OPEN */
+
+uploadArea.addEventListener(
+    "click",
+    () => billPhoto.click()
+);
+
+/* FILE SELECT */
+
+billPhoto.addEventListener(
+    "change",
+    function(){
+
+        const file =
+            this.files[0];
+
+        if(file){
+
+            showPreview(file);
+        }
+    }
+);
+
+/* DRAG EVENTS */
+
+uploadArea.addEventListener(
+    "dragover",
+    function(e){
+
+        e.preventDefault();
+
+        uploadArea.classList.add(
+            "dragover"
+        );
+    }
+);
+
+uploadArea.addEventListener(
+    "dragleave",
+    function(){
+
+        uploadArea.classList.remove(
+            "dragover"
+        );
+    }
+);
+
+uploadArea.addEventListener(
+    "drop",
+    function(e){
+
+        e.preventDefault();
+
+        uploadArea.classList.remove(
+            "dragover"
+        );
+
+        const file =
+            e.dataTransfer.files[0];
+
+        if(file){
+
+            billPhoto.files =
+                e.dataTransfer.files;
+
+            showPreview(file);
+        }
+    }
+);
+
+/* PREVIEW */
+
+function showPreview(file){
+
+    fileName.innerText =
+        file.name;
+
+    const reader =
+        new FileReader();
+
+    reader.onload =
+        function(e){
+
+            previewImage.src =
+                e.target.result;
+
+            previewContainer.style.display =
+                "block";
+        };
+
+    reader.readAsDataURL(file);
+}
+
+/* REMOVE IMAGE */
+
+removeImage.addEventListener(
+    "click",
+    function(e){
+
+        e.stopPropagation();
+
+        billPhoto.value = "";
+
+        previewImage.src = "";
+
+        previewContainer.style.display =
+            "none";
+
+        fileName.innerText = "";
+    }
+);
+

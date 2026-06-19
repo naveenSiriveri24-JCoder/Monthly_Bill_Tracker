@@ -154,14 +154,66 @@
 
             </div>           
 
-            <input
-                type="file"
-                id="billPhoto"
-                accept="image/*">
+<div class="upload-container">
+
+    <div
+        id="uploadArea"
+        class="upload-area">
+
+        <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+
+        <h3>
+            Drag & Drop to Upload File
+        </h3>
+
+        <p>
+            OR
+        </p>
+
+        <button
+            type="button"
+            class="browse-btn">
+
+            Browse File
+
+        </button>
+
+        <input
+            type="file"
+            id="billPhoto"
+            accept="image/*">
+
+    </div>
+
+    <div
+        id="previewContainer"
+        class="preview-container">
+
+        <img
+            id="previewImage"
+            class="preview-image">
+
+        <button
+            type="button"
+            id="removeImage"
+            class="remove-image">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+        <p
+            id="fileName"
+            class="file-name">
+        </p>
+
+    </div>
+
+</div>
 
             <button onclick="addExpense()">
-                <i class="fa-solid fa-plus"></i>
-                Submit
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                Save Entry
             </button>
 
         </div>
@@ -533,6 +585,29 @@
     </div>
 
 </div>
+
+<div
+    id="imageModal"
+    class="image-modal">
+
+    <div class="image-modal-content">
+
+        <button
+            id="closeImageModal"
+            class="close-image-modal">
+            
+            <i class="fa-solid fa-xmark"></i>
+                
+        </button>
+
+        <img
+            id="modalImage"
+            class="modal-image">
+
+    </div>
+
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script src="api.js"></script>
