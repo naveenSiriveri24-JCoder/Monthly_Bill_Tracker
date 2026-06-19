@@ -1,3 +1,15 @@
+if(
+    !sessionStorage.getItem(
+        "loggedIn"
+    )
+){
+
+    window.location.href =
+        "login.html";
+}
+
+
+
 let expenses = [];
 let editId = null;
 let expenseChart = null;
