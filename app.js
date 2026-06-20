@@ -150,11 +150,7 @@ async function addExpense() {
         return;
     }
 
-    let imageData = "";
-
-    if (file) {
-        imageData = await getBase64(file);
-    }
+ 
 
     // EDIT MODE
     if(editId){
@@ -189,7 +185,7 @@ async function addExpense() {
         amount: Number(amount),
         category,
         date,
-        image: imageData
+       
     };
 
     await saveExpenseToSheet(expense);
