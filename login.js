@@ -1,11 +1,12 @@
-import { db }
+import { auth }
 from "./firebase.js";
 
 import {
-    collection,
-    getDocs
+    signInWithEmailAndPassword,
+    setPersistence,
+    browserSessionPersistence
 }
-from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 
 const pinBoxes =
     document.querySelectorAll(
@@ -30,6 +31,23 @@ pinBoxes.forEach(
                 }
             }
         );
+
+        box.addEventListener(
+            "keydown",
+            e => {
+
+                if(
+                    e.key === "Backspace" &&
+                    !box.value &&
+                    index > 0
+                ){
+
+                    pinBoxes[
+                        index - 1
+                    ].focus();
+                }
+            }
+        );
     }
 );
 
@@ -44,77 +62,52 @@ async function verifyPin(){
         )
         .join("");
 
+    if(pin.length !== 4){
+
+        showToast(
+            "❌ Enter 4 Digit PIN",
+            "error"
+        );
+
+        return;
+    }
+
     try{
 
-        const snapshot =
-            await getDocs(
-                collection(
-                    db,
-                    "users"
-                )
-            );
+        await setPersistence(
+            auth,
+            browserSessionPersistence
+        );
 
-        let valid = false;
-        let userName = "";
+        await signInWithEmailAndPassword(
 
-        snapshot.forEach(doc => {
+            auth,
 
-            const user =
-                doc.data();
+            "naveensiriveri.24@gmail.com",
 
-            if(
-                user.pin === pin
-            ){
+            pin + "MBT@2026"
 
-                valid = true;
+        );
 
-                userName =
-                    user.name;
-            }
-        });
+        showToast(
+            "✅ Login Successful",
+            "success"
+        );
 
-        if(valid){
+        setTimeout(() => {
 
-            sessionStorage.setItem(
-                "loggedIn",
-                "true"
-            );
+            window.location.href =
+                "dashboard.html";
 
-            sessionStorage.setItem(
-                "userName",
-                userName
-            );
-
-            showToast(
-                `✅ Welcome ${userName}`,
-                "success"
-            );
-
-            setTimeout(() => {
-
-                window.location.href =
-                    "index.html";
-
-            }, 1000);
-
-        }
-        else{
-
-            showToast(
-                "❌ Invalid PIN",
-                "error"
-            );
-        }
+        }, 1000);
 
     }
     catch(error){
 
-        console.error(
-            error
-        );
+        console.error(error);
 
         showToast(
-            "❌ Unable to verify PIN",
+            "❌ Invalid PIN",
             "error"
         );
     }
@@ -175,3 +168,21 @@ function showToast(
 
     }, 3000);
 }
+
+window.addEventListener(
+    "pageshow",
+    () => {
+
+        document
+            .querySelectorAll(
+                ".pin-box"
+            )
+            .forEach(box => {
+
+                box.value = "";
+            });
+
+        pinBoxes[0].focus();
+    }
+);
+

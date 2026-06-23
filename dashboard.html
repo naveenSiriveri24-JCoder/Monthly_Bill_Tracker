@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Bill Tracker</title>
+
+    <link
+    id="themeStylesheet"
+    rel="stylesheet"
+    href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+<div id="toast"></div>
+
+<div class="container">
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div class="logo">
+
+            <i class="fa-solid fa-wallet"></i>
+           Monthly Bill Tracker
+
+        <h1 class="tagLine">
+            <span>
+                Track • Analyze • Save
+            </span>
+
+        </h1>
+
+        </div>
+        <div class="header-actions">
+
+            <button
+                class="logout-btn"
+                onclick="logout()">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+                Logout
+
+            </button>
+
+        </div>
+
+
+    <div class="header-controls">
+        <span class="theme-label">
+                    Theme
+        </span>
+    <select
+        id="themeSelector"
+        onchange="changeTheme()">
+
+        <option value="style.css">
+            🟢 Claymorphism
+        </option>
+
+        <option value="skeuomorphism.css">
+            🟠 Skeuomorphism
+        </option>
+
+    </select>
+<div class="theme-toggle">
+
+    <span class="theme-label">
+        Mode
+    </span>
+
+    <label class="switch">
+
+        <input
+            type="checkbox"
+            id="themeSwitch"
+            onchange="toggleTheme()">
+
+        <span class="slider">
+
+            <i class="fa-solid fa-moon moon-icon"></i>
+
+            <i class="fa-solid fa-sun sun-icon"></i>
+
+        </span>
+
+    </label>
+
+</div>
+
+</div>
+
+    </div>
+
+    <!-- TABS -->
+
+    <div class="tabs">
+
+        <button
+            class="tab-btn active"
+            onclick="showTab('dashboardTab', this)">
+
+           <i class="fa-solid fa-chart-pie"></i>
+                Dashboard
+
+        </button>
+
+        <button
+            class="tab-btn"
+            onclick="showTab('expensesTab', this)">
+
+                <i class="fa-solid fa-receipt"></i>
+                    Expenses
+
+        </button>
+
+        <button
+            class="tab-btn"
+            onclick="showTab('settingsTab', this)">
+
+             <i class="fa-solid fa-gear"></i>
+                Settings
+
+        </button>
+
+    </div>
+
+    <!-- DASHBOARD TAB -->
+
+    <div
+        id="dashboardTab"
+        class="tab-content">
+
+        <!-- ADD EXPENSE -->
+
+        <div class="expense-form">
+            <h3>Add New Expense: </h3>
+            <input
+                type="text"
+                id="title"
+                placeholder="Expense Name">
+
+            <input
+                type="number"
+                id="amount"
+                placeholder="Amount">
+
+            <select id="category">
+
+                <option value="">
+                    Select Category
+                </option>
+
+            </select>
+
+            <div class="field-group">
+
+                <input
+                    type="date"
+                    id="date">
+
+            </div>           
+
+<div class="upload-container">
+
+    <div
+        id="uploadArea"
+        class="upload-area">
+
+        <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+
+        <h3>
+            Drag & Drop to Upload File
+        </h3>
+
+        <p>
+            OR
+        </p>
+
+        <button
+            type="button"
+            class="browse-btn">
+
+            Browse File
+
+        </button>
+
+        <input
+            type="file"
+            id="billPhoto"
+            accept="image/*">
+
+    </div>
+
+    <div
+        id="previewContainer"
+        class="preview-container">
+
+        <img
+            id="previewImage"
+            class="preview-image">
+
+        <button
+            type="button"
+            id="removeImage"
+            class="remove-image">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+        <p
+            id="fileName"
+            class="file-name">
+        </p>
+
+    </div>
+
+</div>
+
+            <button onclick="addExpense()">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                Save Entry
+            </button>
+
+        </div>
+
+        <!-- DASHBOARD CARDS + PIE CHART -->
+
+        <div class="dashboard-section">
+
+            <div id="dashboard"></div>
+<div class="chart-scroll">
+    <div class="chart-container">
+
+        <h3 class="chart-title">
+            <i class="fa-solid fa-chart-pie"></i>
+
+                Expense Distribution by Category
+        </h3>
+
+                <div class="chart-layout">
+
+                    <div class="chart-canvas">
+
+                        <canvas
+                            id="expenseChart">
+                        </canvas>
+
+                    </div>
+
+                    <div
+                        id="customLegend"
+                        class="chart-legend">
+                    </div>
+
+                    </div>
+
+                    <p
+                        id="pieChartSummary"
+                        class="pie-chart-summary">
+                    </p>
+
+    </div>
+</div>
+    </div>
+
+</div>
+
+<!-- EXPENSES TAB -->
+
+<div
+    id="expensesTab"
+    class="tab-content"
+    style="display:none;">
+
+    <!-- TREND GRAPH -->
+
+    <div class="trend-chart-container">
+
+        <h3><i class="fa-solid fa-chart-line"></i>
+        Expense Distribution
+        </h3>
+
+        <div class="trend-wrapper">
+
+            <canvas id="trendChart"></canvas>
+
+        </div>
+
+    </div>
+
+    <!-- SUMMARY CARDS -->
+
+    <div class="expenses-summary">
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+                 <i class="fa-solid fa-file-invoice"></i>
+            </div>
+
+            <div class="summary-content">
+
+                <span>
+                    Total Bills
+                </span>
+
+                <h2 id="filteredBills">
+                    0
+                </h2>
+
+            </div>
+
+        </div>
+    
+        <div class="summary-card">
+
+            <div class="summary-icon">
+                 <i class="fa-solid fa-sack-dollar"></i>
+            </div>
+
+            <div class="summary-content">
+
+                <span>
+                    Total Expenses
+                </span>
+
+                <h2 id="filteredAmount">
+                    ₹0
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="budget-progress-card">
+
+    <h3>
+        <i class="fa-solid fa-bullseye"></i>
+            Monthly Budget Progress
+    </h3>
+
+            <div class="progress-bar">
+
+                <div
+                    id="progressFill"
+                    class="progress-fill">
+
+                    <span id="progressText">
+                        0%
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="budget-details">
+
+                <div>
+                    Budget:
+                    <span id="budgetAmount">
+                        ₹0
+                    </span>
+                </div>
+
+                <div>
+                    Spent:
+                    <span id="spentAmount">
+                        ₹0
+                    </span>
+                </div>
+
+                <div>
+                    Remaining:
+                    <span id="remainingAmount">
+                        ₹0
+                    </span>
+                </div>
+
+                </div>
+
+            </div>
+
+    <!-- FILTERS -->
+
+    <div class="filter-section">
+
+        <div class="search-box">
+
+        <i class="fa-solid fa-magnifying-glass"></i>
+
+        <input
+            type="text"
+            id="searchInput"
+            
+            oninput="
+                currentPage = 1;
+                renderExpenses();
+            ">
+            </div>
+        <div class="field-group">
+
+            <input
+                type="month"
+                id="monthFilter"
+                onchange="currentPage = 1;
+                            renderExpenses();">
+
+        </div>
+    </div>
+
+    <!-- EXPORT BUTTONS -->
+
+    <div class="export-section">
+
+        <button onclick="exportCSV()">
+           <i class="fa-solid fa-file-csv"></i>
+            Export CSV
+        </button>
+
+        <button onclick="exportPDF()">
+          <i class="fa-solid fa-file-pdf"></i>
+            Export PDF
+        </button>
+
+    </div>
+
+    <!-- TABLE -->
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Name</th>
+                    <th>Amount</th>
+                    <th>Category</th>
+                    <th>Date</th>
+                    <th>Image</th>
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="expenseTable"></tbody>
+
+        </table>
+
+    </div>
+       <div class="pagination">
+
+    <i
+        id="prevBtn"
+        class="fa-solid fa-chevron-left page-icon"
+        onclick="changePage(-1)">
+    </i>
+
+    <span id="pageInfo"></span>
+
+    <i
+        id="nextBtn"
+        class="fa-solid fa-chevron-right page-icon"
+        onclick="changePage(1)">
+    </i>
+
+</div>
+</div>
+
+    <!-- SETTINGS TAB -->
+
+    <div
+        id="settingsTab"
+        class="tab-content"
+        style="display:none;">
+
+        <div class="category-card">
+
+            <h3>
+
+                <i class="fa-solid fa-folder-tree"></i>
+                Category Management
+
+            </h3>
+
+            <div class="category-section">
+
+                <input
+                    type="text"
+                    id="categoryInput"
+                    placeholder="Add New Category">
+
+                <button onclick="addCategory()">
+                    <i class="fa-solid fa-folder-plus"></i>
+                    Add Category
+                </button>
+
+                <select id="categoryDelete"></select>
+
+                <button onclick="deleteCategory()">
+                   <i class="fa-solid fa-folder-minus"></i>
+                    Delete Category
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="budget-settings-card">
+
+            <h3>
+                <i class="fa-solid fa-bullseye"></i>
+                    Monthly Budget
+            </h3>
+
+            <p class="budget-desc">
+                Set your monthly spending target
+            </p>
+
+            <div class="budget-settings-row">
+
+                <input
+                    type="number"
+                    id="monthlyBudget"
+                    placeholder="Enter Budget Amount">
+
+                <button
+                    onclick="saveBudget()">
+
+                    <i class="fa-solid fa-floppy-disk"></i>
+                        Save Budget
+
+                </button>
+
+            </div>
+
+        </div>
+            
+
+    </div>
+
+</div>
+<div id="editModal" class="modal">
+
+    <div class="modal-content">
+
+        <h2>
+           <i class="fa-solid fa-pen-to-square"></i>
+
+            Edit Expense
+        </h2>
+
+        <input
+            type="hidden"
+            id="editId">
+
+        <input
+            type="text"
+            id="editTitle"
+            placeholder="Expense Name">
+
+        <input
+            type="number"
+            id="editAmount"
+            placeholder="Amount">
+
+        <select id="editCategory"></select>
+
+        <input
+            type="date"
+            id="editDate">
+
+        <div class="modal-buttons">
+
+            <button onclick="saveEdit()">
+                Save
+            </button>
+
+            <button
+                class="delete-btn"
+                onclick="closeModal()">
+                Cancel
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div
+    id="imageModal"
+    class="image-modal">
+
+    <div class="image-modal-content">
+
+        <button
+            id="closeImageModal"
+            class="close-image-modal">
+            
+            <i class="fa-solid fa-xmark"></i>
+                
+        </button>
+
+        <img
+            id="modalImage"
+            class="modal-image">
+
+    </div>
+
+</div>
+<div id="deleteModal" class="delete-modal">
+
+    <div class="delete-card">
+
+        <i class="fa-solid fa-trash-can delete-icon"></i>
+
+        <h3>Delete Expense?</h3>
+
+        <p>
+            This action cannot be undone.
+        </p>
+
+        <div class="delete-actions">
+
+            <button
+                class="cancel-btn"
+                onclick="closeDeleteModal()">
+
+                No
+
+            </button>
+
+            <button
+                class="confirm-btn"
+                onclick="confirmDelete()">
+
+                Yes, Delete
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script type="module" src="app.js"></script>
+
+</body>
+</html>

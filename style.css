@@ -972,7 +972,7 @@ input:not(:checked) + .slider .sun-icon{
 
     .tabs{
 
-        flex-direction:column;
+        flex-direction:row;
     }
 
     .expense-form{
@@ -2101,4 +2101,98 @@ input:not(:checked) + .slider .sun-icon{
 }
 .dark-mode .delete-card p{
     color: rgb(249, 199, 2);
+}
+
+.header{
+
+    position:relative;
+}
+.header-actions{
+
+    position:absolute;
+
+    top:15px;
+
+    right:15px;
+}
+.logout-btn{
+
+    padding:7px 10px;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:0px;
+
+    font-size:12px;
+
+    font-weight:600;
+    
+    box-shadow:
+        3px 3px 15px #fbe4e4;
+
+    color: rgb(245, 211, 202);
+        
+}
+.logout-btn i{
+    font-size:15px;
+}
+
+.logout-btn:hover{
+   
+   
+    transform: scale(1.03); 
+    
+        box-shadow:
+        3px 3px 8px #349901;
+}
+
+.dark-mode .logout-btn:hover{
+    box-shadow: 3px 3px 15px #858585;;
+}
+.dark-mode .logout-btn{
+    box-shadow: none;
+}
+
+.header,
+.tabs,
+.expense-form,
+.summary-cards,
+.chart-container,
+.summary-card,
+.trend-chart-container,
+.expenses-summary,
+.expense-form,
+.category-card,
+.category-section,
+.table-container,
+.budget-settings-card,
+.table-container,
+.export-section,
+.filter-section,
+.budget-progress-card{
+
+    margin-bottom:8px;
+}
+
+.budget-settings-card,
+.table-container,
+.export-section,
+.filter-section,
+.budget-progress-card,
+.expenses-summary
+{
+    margin-top: 8px;
+}
+
+#dashboard{
+margin-top: 8px;
+margin-bottom: 0%;
 }

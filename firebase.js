@@ -7,6 +7,9 @@ from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 import { getStorage }
 from "https://www.gstatic.com/firebasejs/12.15.0/firebase-storage.js";
 
+import { getAuth }
+from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+
 const firebaseConfig = {
 
     apiKey:
@@ -39,3 +42,6 @@ export const db =
 
 export const storage =
     getStorage(app);
+
+export const auth =
+    getAuth(app);

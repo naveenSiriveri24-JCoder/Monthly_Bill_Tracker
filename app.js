@@ -1,3 +1,43 @@
+import { auth }
+from "./firebase.js";
+
+import {
+    onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+
+onAuthStateChanged(
+
+    auth,
+
+    user => {
+
+        if(!user){
+
+            window.location.replace(
+                "index.html"
+            );
+        }
+    }
+);
+
+import {
+    signOut
+}
+from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+
+async function logout(){
+
+    await signOut(auth);
+
+    window.location.replace(
+        "index.html"
+    );
+}
+
+window.logout =
+    logout;
+
 if(
     !sessionStorage.getItem(
         "loggedIn"
@@ -5,9 +45,10 @@ if(
 ){
 
     window.location.replace(
-        "login.html"
+        "dashboard.html"
     );
 }
+
 
 import {
     saveExpense,
@@ -197,15 +238,24 @@ const expense = {
         )
 
 };
+try{
 
 await saveExpense(
     expense
 );
 
 showToast(
-    "✅ Expense Added",
+    "✅ Expense Added Successfully",
     "success"
 );
+}
+ catch(error){
+
+    showToast(
+        "❌ Failed to Add Expense",
+        "error"
+    );
+}
 
 expenses =
     await loadExpenses();
@@ -2107,3 +2157,4 @@ window.renderExpenses = renderExpenses;
 window.deleteExpense = deleteExpense;
 window.editExpense = editExpense;
 window.viewImage = viewImage;
+window.logout = logout;
