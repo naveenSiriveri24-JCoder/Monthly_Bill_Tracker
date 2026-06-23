@@ -35,20 +35,6 @@ async function logout(){
     );
 }
 
-window.logout =
-    logout;
-
-if(
-    !sessionStorage.getItem(
-        "loggedIn"
-    )
-){
-
-    window.location.replace(
-        "dashboard.html"
-    );
-}
-
 
 import {
     saveExpense,
