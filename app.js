@@ -2158,3 +2158,91 @@ if(
             );
         });
 }
+
+const networkBanner =
+    document.getElementById(
+        "networkBanner"
+    );
+
+const networkText =
+    document.getElementById(
+        "networkText"
+    );
+
+let bannerTimer;
+
+function showNetworkBanner(
+    message,
+    status
+){
+
+    networkText.textContent =
+        message;
+
+    networkBanner.className =
+        `network-banner show ${status}`;
+
+    clearTimeout(
+        bannerTimer
+    );
+
+    if(
+        status === "online"
+    ){
+
+        bannerTimer =
+            setTimeout(() => {
+
+                networkBanner.classList.remove(
+                    "show"
+                );
+
+            }, 1000);
+    }
+}
+
+function closeNetworkBanner(){
+
+    networkBanner.classList.remove(
+        "show"
+    );
+}
+
+window.addEventListener(
+    "online",
+    () => {
+
+        showNetworkBanner(
+            "🟢 Internet Connected",
+            "online"
+        );
+    }
+);
+
+window.addEventListener(
+    "offline",
+    () => {
+
+        showNetworkBanner(
+            "🔴 No Internet Connection..! Check Your Network",
+            "offline"
+        );
+    }
+);
+
+window.addEventListener(
+    "load",
+    () => {
+
+        if(
+            !navigator.onLine
+        ){
+
+            showNetworkBanner(
+                "🔴 No Internet Connection..! Check Your Network",
+                "offline"
+            );
+        }
+    }
+);
+window.closeNetworkBanner = closeNetworkBanner;
