@@ -41,6 +41,17 @@ table,
         0 5px 12px rgba(0,0,0,.15);
     
 }
+.summary-card{
+
+    margin-top: 8px;
+}
+.summary-card:hover{
+    transform: scale(1.03);
+}
+
+.card:hover{
+     transform: scale(1.03);
+}
 
 .trend-chart-container{
 
@@ -83,9 +94,11 @@ table,
     background:linear-gradient(to bottom,var(--primary),var(--primary-dark));
 }
 
-.logo{display:flex;flex-direction:column;color:white;font-size:30px;font-weight:700;}
+.logo{display:flex;flex-direction:column;color:rgb(247, 244, 243);font-size:23px;font-weight:700;}
 .logo span{color:rgba(255,255,255,.85);font-size:14px;}
-
+.dark-mode .logo{
+    color:#fb7a10;
+}
 .tabs{display:flex;gap:15px;margin-bottom:25px;}
 
 .tab-btn{

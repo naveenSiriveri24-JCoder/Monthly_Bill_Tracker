@@ -558,7 +558,16 @@ button:hover{
     box-shadow:
         10px 10px 22px #d7e5d7,
         -10px -10px 22px #ffffff;
+    margin-top: 10px;
 }
+.summary-card:hover{
+    transform: scale(1.03);
+}
+
+.card:hover{
+     transform: scale(1.03);
+}
+
 @media(max-width:768px){
 
     .summary-card{
