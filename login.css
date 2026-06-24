@@ -586,3 +586,24 @@ body{
         font-size:13px;
     }
 }
+
+.app-version{
+
+    position:fixed;
+
+    bottom:15px;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    font-size:12px;
+
+    font-weight:500;
+
+    opacity:.7;
+
+    letter-spacing:1px;
+
+    font-style: italic;
+}
