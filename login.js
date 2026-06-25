@@ -8,6 +8,17 @@ import {
 }
 from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 
+import {
+    doc,
+    getDoc
+}
+from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+import {
+    db
+}
+from "./firebase.js";
+
 const pinBoxes =
     document.querySelectorAll(
         ".pin-box"
@@ -79,15 +90,40 @@ async function verifyPin(){
             browserSessionPersistence
         );
 
-        await signInWithEmailAndPassword(
+        const pinDoc =
+                        await getDoc(
 
-            auth,
+                            doc(
+                                db,
+                                "loginPins",
+                                pin
+                            )
+                        );
 
-            "naveensiriveri.24@gmail.com",
+                    if(
+                        !pinDoc.exists()
+                    ){
 
-            pin + "MBT@2026"
+                        showToast(
+                            "❌ Invalid PIN",
+                            "error"
+                        );
 
-        );
+                        return;
+                    }
+
+                    const email =
+                        pinDoc.data().email;
+
+                    await signInWithEmailAndPassword(
+
+                        auth,
+
+                        email,
+
+                        pin + "MBT@2026"
+
+                    );
 
         showToast(
             "✅ Login Successful",

@@ -7,12 +7,18 @@ import {
     getDocs,
     deleteDoc,
     updateDoc,
-    doc
+    doc,
+    query,
+    where
 }
 
 from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 
+import {
+    auth
+}
+from "./firebase.js";
 
 export async function saveExpense(
     expense
@@ -28,14 +34,34 @@ export async function saveExpense(
 }
 
 export async function loadExpenses(){
+       
+    if(!auth.currentUser){
 
-    const snapshot =
-        await getDocs(
+            return [];
+
+        }
+        
+    const q =
+        query(
+
             collection(
                 db,
                 "expenses"
+            ),
+
+            where(
+
+                "userId",
+
+                "==",
+
+                auth.currentUser.uid
+
             )
         );
+
+    const snapshot =
+        await getDocs(q);
 
     const expenses = [];
 

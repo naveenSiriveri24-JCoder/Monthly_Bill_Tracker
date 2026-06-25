@@ -1,5 +1,11 @@
-import { auth }
+import { auth, db }
 from "./firebase.js";
+
+import {
+    doc,
+    getDoc
+}
+from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 import {
     onAuthStateChanged
@@ -10,9 +16,13 @@ onAuthStateChanged(
 
     auth,
 
-    user => {
+    async user => {
 
-        if(!user){
+        if(user){
+
+            await init();
+
+        }else{
 
             window.location.replace(
                 "index.html"
@@ -56,9 +66,10 @@ async function init(){
     renderExpenses();
 
     renderDashboard();
+    await loadUserProfile();
 }
 
-init();
+
 
 let deleteId = null;
 let expenses = [];
@@ -218,10 +229,8 @@ const expense = {
     image:
         selectedImage,
 
-    userName:
-        sessionStorage.getItem(
-            "userName"
-        )
+    userId:
+    auth.currentUser.uid
 
 };
 try{
@@ -735,6 +744,20 @@ async function saveEdit(){
         "success"
     );
 }
+function lightenColor(hex, percent){
+
+    hex = hex.replace("#","");
+
+    let r = parseInt(hex.substring(0,2),16);
+    let g = parseInt(hex.substring(2,4),16);
+    let b = parseInt(hex.substring(4,6),16);
+
+    r = Math.min(255, Math.floor(r + (255-r) * percent/100));
+    g = Math.min(255, Math.floor(g + (255-g) * percent/100));
+    b = Math.min(255, Math.floor(b + (255-b) * percent/100));
+
+    return `rgb(${r},${g},${b})`;
+}
 
 function renderChart(categoryTotals){
 
@@ -764,112 +787,56 @@ function renderChart(categoryTotals){
         );
 const ctx =
     canvas.getContext("2d");
+const colors = [
 
+"#2E7D32",
+"#1565C0",
+"#EF6C00",
+"#C2185B",
+"#6A1B9A",
+"#00695C",
+"#5D4037",
+"#283593",
+"#00838F",
+"#F9A825",
+"#8BC34A",
+"#E91E63",
+"#3F51B5",
+"#795548",
+"#009688",
+"#9C27B0",
+"#FF5722",
+"#607D8B",
+"#FFC107",
+"#CDDC39"
+
+];
 const gradients = [];
 
-/* Green */
+colors.forEach(color => {
 
-const g1 =
-    ctx.createLinearGradient(
-        0,0,300,300
+    const gradient =
+        ctx.createLinearGradient(
+            0,0,300,300
+        );
+
+    gradient.addColorStop(
+        0,
+        lightenColor(color,35)
     );
 
-g1.addColorStop(
-    0,
-    "#7ddd82"
-);
-
-g1.addColorStop(
-    1,
-    "#2E7D32"
-);
-
-gradients.push(g1);
-
-/* Blue */
-
-const g2 =
-    ctx.createLinearGradient(
-        0,0,300,300
+    gradient.addColorStop(
+        1,
+        color
     );
 
-g2.addColorStop(
-    0,
-    "#64B5F6"
+    gradients.push(gradient);
+
+});
+
+const legendGradients = colors.map(color =>
+    `linear-gradient(135deg, ${lightenColor(color, 35)}, ${color})`
 );
-
-g2.addColorStop(
-    1,
-    "#1565C0"
-);
-
-gradients.push(g2);
-
-/* Orange */
-
-const g3 =
-    ctx.createLinearGradient(
-        0,0,300,300
-    );
-
-g3.addColorStop(
-    0,
-    "#FFB74D"
-);
-
-g3.addColorStop(
-    1,
-    "#EF6C00"
-);
-
-gradients.push(g3);
-
-/* Pink */
-
-const g4 =
-    ctx.createLinearGradient(
-        0,0,300,300
-    );
-
-g4.addColorStop(
-    0,
-    "#e77d7d"
-);
-
-g4.addColorStop(
-    1,
-    "#f10a0a"
-);
-
-gradients.push(g4);
-/*  const colors = [
-
-//     "#81C784",
-//     "#64B5F6",
-//     "#9575CD",
-//     "#F06292",
-//     "#FFB74D",
-//     "#4DB6AC",
-//     "#A1887F"
-
- ]; */
-
-const legendGradients = [
-
-    "linear-gradient(135deg,#81C784,#2E7D32)",
-
-    "linear-gradient(135deg,#64B5F6,#1565C0)",
-
-    "linear-gradient(135deg,#FFB74D,#EF6C00)",
-
-    "linear-gradient(135deg,#F48FB1,#C2185B)",
-
-    "linear-gradient(135deg,#4DB6AC,#00695C)",
-
-    "linear-gradient(135deg,#9575CD,#4527A0)",
-
-    "linear-gradient(135deg,#A1887F,#5D4037)"
-];
 
     expenseChart =
         new Chart(canvas, {
@@ -884,7 +851,8 @@ const legendGradients = [
 
                 data: values,
 
-                backgroundColor: gradients,
+                backgroundColor: labels.map(
+                                (_, index) => gradients[index % gradients.length]),
 
                 borderWidth: 0.5,
 
@@ -962,7 +930,7 @@ const legendGradients = [
                     <span
                         class="legend-color"
                         style="
-                            background:${legendGradients[index]};
+                            background:${legendGradients[index % legendGradients.length]};
                         ">
                     </span>
 
@@ -2246,3 +2214,109 @@ window.addEventListener(
     }
 );
 window.closeNetworkBanner = closeNetworkBanner;
+
+async function loadUserProfile(){
+
+    try{
+
+        const uid =
+            auth.currentUser.uid;
+
+        const snapshot =
+            await getDoc(
+
+                doc(
+                    db,
+                    "users",
+                    uid
+                )
+            );
+
+        if(!snapshot.exists()){
+
+            console.log(
+                "User profile not found."
+            );
+
+            return;
+        }
+
+        const user =
+            snapshot.data();
+
+        document.getElementById(
+            "headerUserName"
+        ).textContent =
+            user.name;
+
+        document.getElementById(
+            "profileName"
+        ).textContent =
+            user.name;
+
+        document.getElementById(
+            "profileEmail"
+        ).textContent =
+            user.email;
+
+        document.getElementById(
+            "profileMobile"
+        ).textContent =
+            user.mobile;
+
+        document.getElementById(
+            "profileUid"
+        ).textContent =
+            uid;
+
+        if(user.createdAt){
+
+            document.getElementById(
+                "profileJoined"
+            ).textContent =
+                user.createdAt.toDate().toLocaleDateString();
+
+        }else{
+
+            document.getElementById(
+                "profileJoined"
+            ).textContent =
+                "-";
+        }
+
+    }
+    catch(error){
+
+        console.error(
+            error
+        );
+    }
+}
+
+function openProfile(){
+
+    document
+        .getElementById(
+            "profileModal"
+        )
+        .classList.add(
+            "show"
+        );
+}
+
+function closeProfile(){
+
+    document
+        .getElementById(
+            "profileModal"
+        )
+        .classList.remove(
+            "show"
+        );
+}
+
+window.openProfile =
+    openProfile;
+
+window.closeProfile =
+    closeProfile;

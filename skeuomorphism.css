@@ -87,14 +87,32 @@ table,
 
 .header{
     display:flex;
-    justify-content:space-between;
+    justify-content:center;
     align-items:center;
     padding:25px;
     margin-bottom:25px;
     background:linear-gradient(to bottom,var(--primary),var(--primary-dark));
 }
 
-.logo{display:flex;flex-direction:column;color:rgb(247, 244, 243);font-size:23px;font-weight:700;}
+.logo{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    gap:0;
+
+    line-height:1.1;
+
+    font-size:23px;
+    font-weight:700;
+}
+.logo i{
+    margin-top: 20px;
+}
+
 .logo span{color:rgba(255,255,255,.85);font-size:14px;}
 .dark-mode .logo{
     color:#fb7a10;
@@ -957,29 +975,36 @@ input:not(:checked) + .slider .sun-icon{
 
 .tagLine{
 
-    font-size:32px;
+    margin:0;
 
-    font-weight:800;
+    padding:0;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    line-height:1.2;
 
     background:
         linear-gradient(
             90deg,
-            #e33434,
-            #c4cfd8,
+            #f0f0e7,
+            #f10202,
             #ff9800,
-            #339be5
+            #013703
         );
 
-    background-size:
-        300% 100%;
+    background-size:300% 100%;
 
     -webkit-background-clip:text;
 
-    -webkit-text-fill-color:
-        transparent;
+    -webkit-text-fill-color:transparent;
 
-    animation:
-        gradientMove 6s linear infinite;
+    animation:gradientMove 6s linear infinite;
+}
+
+.tagLine{
+    font-weight: 700;
 }
 
 @keyframes gradientMove{
@@ -1933,6 +1958,8 @@ input:not(:checked) + .slider .sun-icon{
 .header{
 
     position:relative;
+
+    gap:20px
 }
 .header-actions{
 
@@ -2145,3 +2172,168 @@ margin-bottom: 0%;
         font-size:13px;
     }
 }
+
+
+.profile-modal{
+
+    position:fixed;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:100%;
+
+    background:rgba(0,0,0,.45);
+
+    display:none;
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:99999;
+}
+
+.profile-modal.show{
+
+    display:flex;
+}
+
+.profile-card{
+
+    width:380px;
+
+    max-width:90%;
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:30px;
+
+    text-align:center;
+
+    position:relative;
+
+    animation:popup .25s ease;
+
+    
+}
+
+.close-profile{
+
+    position:absolute;
+
+    top:15px;
+
+    right:18px;
+
+    font-size:26px;
+
+    cursor:pointer;
+
+    font-weight:bold;
+}
+
+.profile-large{
+
+    font-size:70px;
+
+    color:#f98a29;
+
+    margin-bottom:15px;
+}
+
+.profile-row{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin:15px 0;
+
+    text-align:left;
+}
+
+@keyframes popup{
+
+    from{
+
+        transform:scale(.8);
+
+        opacity:0;
+    }
+
+    to{
+
+        transform:scale(1);
+
+        opacity:1;
+    }
+}
+
+.user-profile{
+
+    position:absolute;
+
+    top:15px;
+
+    left:10px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:0px;
+
+    cursor:pointer;
+
+    z-index:100;
+}
+.user-info{
+
+    display:flex;
+
+    flex-direction:column;
+
+    line-height:1.2;
+}
+
+.profile-icon{
+
+    font-size:42px;
+
+    color:#f9d39e;
+}
+
+.welcome-text{
+
+    font-size:15px;
+    color:#100e0e;
+    font-weight: 500;
+    
+}
+
+#headerUserName{
+
+    margin:0;
+
+    color:#fbefe6;
+
+    font-size:18px;
+}
+
+.dark-mode .welcome-text{
+    color: rgb(254, 126, 34);
+}
+
+.dark-mode .profile-card{
+    color: rgb(250, 248, 245);
+    background:#2b2520;
+}
+

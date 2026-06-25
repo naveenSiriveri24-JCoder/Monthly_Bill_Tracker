@@ -25,21 +25,52 @@
 
     <!-- HEADER -->
 
-    <div class="header">
+<div class="header">
+
+    <div class="header-left">
+
+        <div class="user-profile" onclick="openProfile()">
+
+            <i class="fa-solid fa-circle-user profile-icon"></i>
+
+            <div class="user-info">
+
+                <span class="welcome-text">
+                    Welcome,
+                </span>
+
+                <h4 id="headerUserName">
+                    Loading...
+                </h4>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="header-center">
 
         <div class="logo">
 
             <i class="fa-solid fa-wallet"></i>
-           Monthly Bill Tracker
 
-        <h1 class="tagLine">
-            <span>
-                Track • Analyze • Save
-            </span>
+            ━━ ExpenseFlow ━━
 
-        </h1>
+            <div class="tagLine">
+
+                <span>
+                    Track • Analyze • Save
+                </span>
+
+            </div>
 
         </div>
+
+    </div>
+
+    <div class="header-right">
+
         <div class="header-actions">
 
             <button
@@ -54,52 +85,56 @@
 
         </div>
 
+        <div class="header-controls">
 
-    <div class="header-controls">
-        <span class="theme-label">
-                    Theme
-        </span>
-    <select
-        id="themeSelector"
-        onchange="changeTheme()">
+            <span class="theme-label">
+                Theme
+            </span>
 
-        <option value="skeuomorphism.css">
-            🟠 Skeuomorphism
-        </option>
+            <select
+                id="themeSelector"
+                onchange="changeTheme()">
 
-        <option value="style.css">
-            🟢 Claymorphism
-        </option>
+                <option value="skeuomorphism.css">
+                    🟠 Skeuomorphism
+                </option>
 
-    </select>
-<div class="theme-toggle">
+                <option value="style.css">
+                    🟢 Claymorphism
+                </option>
 
-    <span class="theme-label">
-        Mode
-    </span>
+            </select>
 
-    <label class="switch">
+            <div class="theme-toggle">
 
-        <input
-            type="checkbox"
-            id="themeSwitch"
-            onchange="toggleTheme()">
+                <span class="theme-label">
+                    Mode
+                </span>
 
-        <span class="slider">
+                <label class="switch">
 
-            <i class="fa-solid fa-moon moon-icon"></i>
+                    <input
+                        type="checkbox"
+                        id="themeSwitch"
+                        onchange="toggleTheme()">
 
-            <i class="fa-solid fa-sun sun-icon"></i>
+                    <span class="slider">
 
-        </span>
+                        <i class="fa-solid fa-moon moon-icon"></i>
 
-    </label>
+                        <i class="fa-solid fa-sun sun-icon"></i>
 
-</div>
+                    </span>
 
-</div>
+                </label>
+
+            </div>
+
+        </div>
 
     </div>
+
+</div>
 
     <!-- TABS -->
 
@@ -676,6 +711,63 @@
         ×
 
     </button>
+
+</div>
+
+<div id="profileModal" class="profile-modal">
+
+    <div class="profile-card">
+
+        <span
+            class="close-profile"
+            onclick="closeProfile()">
+
+            &times;
+
+        </span>
+
+        <i class="fa-solid fa-circle-user profile-large"></i>
+
+        <h2 id="profileName"></h2>
+
+        <p id="profileEmail"></p>
+
+        <hr>
+
+        <div class="profile-row">
+
+            <i class="fa-solid fa-phone"></i>
+
+            <span id="profileMobile"></span>
+
+        </div>
+
+        <div class="profile-row">
+
+            <i class="fa-solid fa-id-card"></i>
+
+            <span id="profileUid"></span>
+
+        </div>
+
+        <div class="profile-row">
+
+            <i class="fa-solid fa-calendar-days"></i>
+
+            <span id="profileJoined"></span>
+
+        </div>
+
+        <hr>
+
+        <p>
+
+            ExpenseFlow ━━ Version 1.0.0
+  
+
+        </p>
+
+    </div>
 
 </div>
 
