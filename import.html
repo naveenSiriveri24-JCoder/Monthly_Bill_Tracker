@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Import Expenses</title>
+</head>
+<body>
+
+<h2>Import Test Expenses</h2>
+
+<input
+    type="password"
+    id="pin"
+    maxlength="4"
+    placeholder="Enter 4 Digit PIN">
+
+<br><br>
+
+<input
+    type="file"
+    id="jsonFile"
+    accept=".json">
+
+<br><br>
+
+<button onclick="importData()">
+    Import Expenses
+</button>
+
+<script type="module" src="import.js"></script>
+
+</body>
+</html>

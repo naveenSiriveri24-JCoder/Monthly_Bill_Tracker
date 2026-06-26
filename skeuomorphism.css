@@ -1243,6 +1243,10 @@ input:not(:checked) + .slider .sun-icon{
     flex-direction:column;
 
     gap:12px;
+
+        max-height:300px;
+
+        overflow-y:auto;
 }
 
 .legend-item{

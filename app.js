@@ -59,10 +59,6 @@ async function init(){
      expenses =
         await loadExpenses();
 
-    console.log(
-        expenses
-    );
-
     renderExpenses();
 
     renderDashboard();
@@ -1014,17 +1010,17 @@ const gradient =
 
 gradient.addColorStop(
     0,
-    "#7d97f5"
+    "#fb7164"
 );
 
 gradient.addColorStop(
     .5,
-    "#3b38e6"
+    "#fbd918"
 );
 
 gradient.addColorStop(
     1,
-    "#114df3"
+    "#03ab43"
 );
 
 const gradient2 =
@@ -1037,12 +1033,12 @@ const gradient2 =
 
 gradient2.addColorStop(
     0,
-    "#f57818"
+    "#1fbaf7"
 );
 
 gradient2.addColorStop(
     1,
-    "#ff776a"
+    "#ff030c"
 );
     trendChart =
         new Chart(ctx, {
@@ -1131,9 +1127,9 @@ gradient2.addColorStop(
                 }
 
             }
+
         });
 }
-
 
 function exportCSV() {
 
