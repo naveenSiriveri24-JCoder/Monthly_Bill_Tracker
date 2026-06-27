@@ -2862,6 +2862,7 @@ function openProfile(){
         .classList.add(
             "show"
         );
+         document.body.style.overflow = "hidden";
 }
 
 function closeProfile(){
@@ -2873,6 +2874,7 @@ function closeProfile(){
         .classList.remove(
             "show"
         );
+        document.body.style.overflow = "auto";
 }
 
 window.openProfile =
@@ -2890,7 +2892,7 @@ function openAbout(){
         .classList.add(
             "show"
         );
-
+        document.body.style.overflow = "hidden";
 }
 
 function closeAbout(){
@@ -2902,7 +2904,7 @@ function closeAbout(){
         .classList.remove(
             "show"
         );
-
+        document.body.style.overflow = "auto";
 }
 
 window.openAbout =

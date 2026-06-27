@@ -728,54 +728,89 @@
 
     <div class="profile-card">
 
-        <span
+        <button
             class="close-profile"
             onclick="closeProfile()">
 
-            &times;
+            <i class="fa-solid fa-xmark"></i>
 
-        </span>
+        </button>
 
-        <i class="fa-solid fa-circle-user profile-large"></i>
+        <!-- Header -->
 
-        <h2 id="profileName"></h2>
+        <div class="profile-header">
 
-        <p id="profileEmail"></p>
+            <i class="fa-solid fa-circle-user profile-large"></i>
 
-        <hr>
+            <h2 id="profileName"></h2>
 
-        <div class="profile-row">
+            <p class="profile-email">
 
-            <i class="fa-solid fa-phone"></i>
+                <i class="fa-solid fa-envelope"></i>
 
-            <span id="profileMobile"></span>
+                <span id="profileEmail"></span>
 
-        </div>
-
-        <div class="profile-row">
-
-            <i class="fa-solid fa-id-card"></i>
-
-            <span id="profileUid"></span>
+            </p>
 
         </div>
 
-        <div class="profile-row">
+        <!-- Body -->
 
-            <i class="fa-solid fa-calendar-days"></i>
+        <div class="profile-body">
 
-            <span id="profileJoined"></span>
+            <div class="profile-row">
+
+                <i class="fa-solid fa-phone"></i>
+
+                <div>
+
+                    <label>Mobile</label>
+
+                    <span id="profileMobile"></span>
+
+                </div>
+
+            </div>
+
+            <div class="profile-row">
+
+                <i class="fa-solid fa-id-card"></i>
+
+                <div>
+
+                    <label>User ID</label>
+
+                    <span id="profileUid"></span>
+
+                </div>
+
+            </div>
+
+            <div class="profile-row">
+
+                <i class="fa-solid fa-calendar-days"></i>
+
+                <div>
+
+                    <label>Member Since</label>
+
+                    <span id="profileJoined"></span>
+
+                </div>
+
+            </div>
 
         </div>
 
-        <hr>
+        <!-- Footer -->
 
-        <p>
+        <div class="profile-footer">
+
+            <i class="fa-solid fa-wallet"></i>
 
             ExpenseFlow ━━ Version 1.0.0
-  
 
-        </p>
+        </div>
 
     </div>
 
@@ -788,58 +823,160 @@
             class="close-about"
             onclick="closeAbout()">
 
-            &times;
+             <i class="fa-solid fa-xmark"></i>
 
         </span>
 
-        <i class="fa-solid fa-wallet about-icon"></i>
+        <!-- Header -->
 
-        <h2>ExpenseFlow</h2>
+        <div class="about-header">
 
-        <p class="version">
+            <i class="fa-solid fa-wallet about-icon"></i>
 
-            Version 1.0.0
+            <h2>ExpenseFlow</h2>
 
-        </p>
+            <p class="version">
 
-        <hr>
+                <i class="fa-solid fa-chart-line"></i>
 
-        <p>
+                Smart Expense Manager
 
-            ExpenseFlow helps you manage
-            daily expenses with beautiful
-            dashboards, analytics and reports.
+                <br>
 
-        </p>
+                <i class="fa-solid fa-code-branch"></i>
 
-        <div class="about-details">
+                Version 1.0.0
 
-            <p><strong>Developer</strong><br>
-            Naveen Siriveri</p>
-
-            <p><strong>Technology</strong><br>
-            HTML • CSS • JavaScript • Firebase</p>
-
-            <p><strong>Features</strong><br>
-            ✓ Expense Tracking<br>
-            ✓ Dashboard Analytics<br>
-            ✓ Bill Image Upload<br>
-            ✓ PDF & CSV Export<br>
-            ✓ Dark Mode<br>
-            ✓ PWA Support<br>
-            ✓ Multi User Login</p>
+            </p>
 
         </div>
 
-        <hr>
+        <!-- Body -->
 
-        <p class="copyright">
+        <div class="about-body">
 
-            © 2026 ExpenseFlow<br>
+            <p class="about-description">
+
+                ExpenseFlow is a modern Progressive Web App (PWA)
+                designed to help you track, analyze and manage
+                your daily expenses with beautiful dashboards,
+                smart analytics and secure cloud storage.
+
+            </p>
+
+            <div class="about-section">
+
+                <h4>
+
+                    <i class="fa-solid fa-user-tie"></i>
+
+                    Developer
+
+                </h4>
+
+                <p>
+
+                    <i class="fa-brands fa-linkedin"></i>
+
+                    <a
+                        href="https://www.linkedin.com/in/naveen-siriveri-457a8631b/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="developer-link">
+
+                        Naveen Siriveri
+
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+
+                    </a>
+
+                </p>
+
+            </div>
+
+            <div class="about-section">
+
+                <h4>
+
+                    <i class="fa-solid fa-laptop-code"></i>
+
+                    Technologies
+
+                </h4>
+
+                <p>
+
+                    HTML • CSS • JavaScript
+
+                    <br>
+
+                    Firebase • Chart.js
+
+                </p>
+
+            </div>
+
+            <div class="about-section">
+
+                <h4>
+
+                    <i class="fa-solid fa-star"></i>
+
+                    Features
+
+                </h4>
+
+                <div class="feature-list">
+
+                    <div><i class="fa-solid fa-chart-pie"></i> Dashboard</div>
+
+                    <div><i class="fa-solid fa-wallet"></i> Expense Tracking</div>
+
+                    <div><i class="fa-solid fa-camera"></i> Bill Upload</div>
+
+                    <div><i class="fa-solid fa-file-pdf"></i> PDF Reports</div>
+
+                    <div><i class="fa-solid fa-file-csv"></i> CSV Export</div>
+
+                    <div><i class="fa-solid fa-chart-line"></i> Charts</div>
+
+                    <div><i class="fa-solid fa-moon"></i> Dark Mode</div>
+
+                    <div><i class="fa-solid fa-palette"></i> Themes</div>
+
+                    <div><i class="fa-solid fa-cloud"></i> Firebase</div>
+
+                    <div><i class="fa-solid fa-users"></i> Multi User</div>
+
+                    <div><i class="fa-solid fa-mobile-screen-button"></i> PWA</div>
+
+                    <div><i class="fa-solid fa-shield-halved"></i> Secure Login</div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+
+        <div class="about-footer">
+
+            <i class="fa-solid fa-heart"></i>
+
+            Built with passion using modern web technologies.
+
+            <br><br>
+
+            <i class="fa-regular fa-copyright"></i>
+
+            2026 ExpenseFlow
+
+            <br>
 
             All Rights Reserved
 
-        </p>
+        </div>
 
     </div>
 
