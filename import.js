@@ -213,7 +213,7 @@ function updateFile(file){
 
     document.getElementById("selectedFile").style.display="flex";
 
-    importBtn.disabled=false;
+    importBtn.disabled=true;
 
 }
 
