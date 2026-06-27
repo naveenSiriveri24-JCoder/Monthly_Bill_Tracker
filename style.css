@@ -655,6 +655,8 @@ button:hover{
     gap:15px;
 
     margin-bottom:25px;
+
+    
 }
 
 /* TABLE */
@@ -1018,7 +1020,7 @@ input:not(:checked) + .slider .sun-icon{
 
     .export-section{
 
-        flex-direction:column;
+        flex-direction:row;
     }
 
     .category-section{

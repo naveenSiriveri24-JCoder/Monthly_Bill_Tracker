@@ -1309,6 +1309,46 @@ if(savedTheme === "dark"){
     ).checked = true;
 }
 
+
+function drawWatermark(doc){
+
+    doc.setGState(
+        new doc.GState({
+            opacity:0.22
+        })
+    );
+
+    doc.setFont(
+        "helvetica",
+        "bold"
+    );
+
+    doc.setFontSize(70);
+
+    doc.setTextColor(
+        170,
+        170,
+        170
+    );
+
+    doc.text(
+        "ExpenseFlow",
+        130,
+        200,
+        {
+            angle:40,
+            align:"center"
+        }
+    );
+
+    doc.setGState(
+        new doc.GState({
+            opacity:1
+        })
+    );
+
+}
+
 function exportPDF(){
 
     const { jsPDF } = window.jspdf;
@@ -1372,201 +1412,588 @@ function exportPDF(){
         :
         0;
 
-    /* HEADER */
-    doc.setFont(
-        "helvetica",
-        "bold"
-    );
 
-    doc.setFontSize(20);
 
-    doc.setTextColor(
+/* REPORT HEADER */
+
+doc.setFillColor(
+    104,
+    159,
+    56
+);
+
+doc.roundedRect(
+    10,
+    10,
+    190,
+    22,
+    5,
+    5,
+    "F"
+);
+
+/* Gloss Highlight */
+
+doc.setFillColor(
     255,
-    152,
-    0
+    255,
+    255
+);
+
+doc.setGState(
+    new doc.GState({
+        opacity:0.20
+    })
+);
+
+doc.roundedRect(
+    10,
+    10,
+    190,
+    6,
+    5,
+    5,
+    "F"
+);
+
+doc.setGState(
+    new doc.GState({
+        opacity:1
+    })
+);
+
+/* Border */
+
+doc.setDrawColor(
+    30,
+    90,
+    40
+);
+
+doc.roundedRect(
+    10,
+    10,
+    190,
+    22,
+    5,
+    5
+);
+
+/* Small App Name */
+
+doc.setFont(
+    "helvetica",
+    "bold"
+);
+
+doc.setFontSize(10);
+
+doc.setTextColor(
+    220,
+    255,
+    220
+);
+
+doc.text(
+    "ExpenseFlow",
+    105,
+    14,
+    {
+        align:"center"
+    }
+);
+
+/* Main Heading */
+
+doc.setFont(
+    "helvetica",
+    "bold"
+);
+
+doc.setFontSize(20);
+
+doc.setTextColor(
+    255,
+    255,
+    255
+);
+
+doc.text(
+
+    "Expense Report",
+
+    105,
+
+    25,
+
+    {
+
+        align:"center"
+
+    }
+
+);
+
+/* Report Period */
+
+
+doc.setFont(
+    "helvetica",
+    "bold"
+);
+
+doc.setFontSize(
+    12
+);
+
+doc.setTextColor(
+    80,
+    80,
+    80
+);
+
+doc.text(
+
+    selectedMonth
+
+    ?
+
+    `Report Period : ${selectedMonth}`
+
+    :
+
+    "Report Period : All Expenses",
+
+    15,
+
+    38
+
+);
+
+/* Divider Line */
+
+doc.setDrawColor(
+    220,
+    220,
+    220
+);
+
+doc.line(
+    15,
+    42,
+    200,
+    42
+);
+
+    /* SUMMARY CARD FUNCTION */
+
+ function drawCard(
+    x,
+    y,
+    title,
+    value,
+    color
+){
+
+    /* Card Background */
+
+    doc.setFillColor(...color);
+
+    doc.roundedRect(
+
+        x,
+        y,
+        44,
+        28,
+        4,
+        4,
+        "F"
+
     );
 
-    doc.text(
-        "Expense Report",
-        14,
-        20
+    /* Gloss Highlight */
+
+    doc.setFillColor(
+        255,
+        255,
+        255
     );
-    /* month */
+
+    doc.roundedRect(
+
+        x,
+        y,
+        44,
+        8,
+        4,
+        4,
+        "F"
+
+    );
+
+    /* Border */
+
+    doc.setDrawColor(
+        220,
+        220,
+        220
+    );
+
+    doc.roundedRect(
+
+        x,
+        y,
+        44,
+        28,
+        4,
+        4
+
+    );
+
+    /* Title */
 
     doc.setFont(
+
         "helvetica",
+
         "bold"
+
     );
-    doc.setFontSize(15);
+
+    doc.setFontSize(10);
 
     doc.setTextColor(80);
 
     doc.text(
-        selectedMonth
-        ?
-        `Month: ${selectedMonth}`
-        :
-        "All Expenses",
-        14,
-        30
-    );
 
-    /* SUMMARY CARD FUNCTION */
-
-    function drawCard(
-        x,
-        y,
         title,
-        value
-    ){
 
-        doc.setFillColor(
-            232,
-            245,
-            233
-        );
+        x + 22,
 
-        doc.roundedRect(
-            x,
-            y,
-            38,
-            25,
-            3,
-            3,
-            "F"
-        );
-         doc.setFont(
-        "helvetica",
-        "bold"
-        );
-        doc.setFontSize(13);
+        y + 6,
 
-        doc.setTextColor(100);
+        {
 
-        doc.text(
-            title,
-            x + 4,
-            y + 8
-        );
+            align:"center"
 
-        doc.setFontSize(13);
+        }
 
-        doc.setTextColor(
-            46,
-            125,
-            50
-        );
-
-        doc.text(
-            String(value),
-            x + 4,
-            y + 18
-        );
-    }
-
-    /* SUMMARY CARDS */
-
-    drawCard(
-        10,
-        40,
-        "Bills",
-        filteredExpenses.length
     );
 
-    drawCard(
-        58,
-        40,
-        "Expense",
-        `Rs. ${total}`
+    /* Value */
+
+    doc.setFontSize(12);
+
+    doc.setTextColor(
+
+        30,
+
+        90,
+
+        40
+
     );
 
-    drawCard(
-        106,
-        40,
-        "Category",
-        highestCategory
+    doc.text(
+
+        String(value),
+
+        x + 22,
+
+        y + 19,
+
+        {
+
+            align:"center"
+
+        }
+
     );
 
-    drawCard(
-        154,
-        40,
-        "Average",
-        `Rs. ${average}`
-    );
+}
+
+drawCard(
+    12,
+    40,
+    "Total Bills",
+    filteredExpenses.length,
+    [232,245,233]
+);
+
+drawCard(
+    60,
+    40,
+    "Total Expense",
+    `Rs. ${total.toLocaleString()}`,
+    [227,242,253]
+);
+
+drawCard(
+    108,
+    40,
+    "Top Category",
+    highestCategory,
+    [255,243,224]
+);
+
+drawCard(
+    156,
+    40,
+    "Average",
+    `Rs. ${average.toLocaleString()}`,
+    [248,232,255]
+);
 
     /* TREND CHART TITLE */
 
-    doc.setFontSize(14);
+/* Header Background */
 
-    doc.setTextColor(
-        46,
-        125,
-        50
+doc.setFillColor(
+    232,
+    245,
+    233
+);
+
+doc.roundedRect(
+    10,
+    70,
+    190,
+    10,
+    4,
+    4,
+    "F"
+);
+
+/* Gloss Effect */
+
+doc.setFillColor(
+    255,
+    255,
+    255
+);
+
+doc.roundedRect(
+    10,
+    70,
+    190,
+    3,
+    4,
+    4,
+    "F"
+);
+
+/* Header Border */
+
+doc.setDrawColor(
+    210,
+    210,
+    210
+);
+
+doc.roundedRect(
+    10,
+    70,
+    190,
+    10,
+    4,
+    4
+);
+
+/* Heading */
+
+doc.setFont(
+    "helvetica",
+    "bold"
+);
+
+doc.setFontSize(13);
+
+doc.setTextColor(
+    46,
+    125,
+    50
+);
+
+doc.text(
+    "Monthly Expense Trend",
+    16,
+    76.5
+);
+
+/* ==========================================
+   UPDATE CHART
+========================================== */
+
+if(trendChart){
+
+    trendChart.update();
+
+}
+
+/* ==========================================
+   GET CHART IMAGE
+========================================== */
+
+const trendCanvas =
+    document.getElementById(
+        "trendChart"
     );
 
-    doc.text(
-        "Monthly Expense Trend",
-        14,
-        80
-    );
+let trendImage = null;
 
-    /* UPDATE CHART */
+try{
 
-    if(trendChart){
-        trendChart.update();
-    }
-
-    const trendCanvas =
-        document.getElementById(
-            "trendChart"
+    trendImage =
+        trendCanvas.toDataURL(
+            "image/png"
         );
 
-    let trendImage = null;
+}catch(err){
 
-    try{
-
-        trendImage =
-            trendCanvas.toDataURL(
-                "image/png"
-            );
-
-    }catch(err){
-
-        console.log(
-            "Trend Error:",
-            err
-        );
-    }
-
-    /* ADD CHART */
-
-    if(trendImage){
-
-        doc.addImage(
-            trendImage,
-            "PNG",
-            15,
-            85,
-            180,
-            55
-        );
-    }
-
-    /* TABLE TITLE */
-
-    doc.setFontSize(14);
-
-    doc.setTextColor(
-        46,
-        125,
-        50
+    console.log(
+        "Trend Error:",
+        err
     );
 
-    doc.text(
-        "Expense Details",
-        14,
-        150
+}
+
+/* ==========================================
+   CHART CARD
+========================================== */
+
+if(trendImage){
+
+    /* Background */
+
+    doc.setFillColor(
+        252,
+        252,
+        252
     );
+
+    doc.roundedRect(
+        10,
+        82,
+        190,
+        68,
+        5,
+        5,
+        "F"
+    );
+
+    /* Border */
+
+    doc.setDrawColor(
+        220,
+        220,
+        220
+    );
+
+    doc.roundedRect(
+        10,
+        82,
+        190,
+        68,
+        5,
+        5
+    );
+
+    /* Chart */
+
+    doc.addImage(
+
+        trendImage,
+
+        "PNG",
+
+        15,
+
+        86,
+
+        180,
+
+        60
+
+    );
+
+}
+
+
+/* TABLE TITLE */
+
+/* Header Background */
+
+doc.setFillColor(
+    232,
+    245,
+    233
+);
+
+doc.roundedRect(
+    10,
+    154,
+    190,
+    10,
+    4,
+    4,
+    "F"
+);
+
+/* Gloss Effect */
+
+doc.setFillColor(
+    255,
+    255,
+    255
+);
+
+doc.roundedRect(
+    10,
+    153,
+    190,
+    3,
+    4,
+    4,
+    "F"
+);
+
+/* Border */
+
+doc.setDrawColor(
+    210,
+    210,
+    210
+);
+
+doc.roundedRect(
+    10,
+    153,
+    190,
+    10,
+    4,
+    4
+);
+
+/* Heading */
+
+doc.setFont(
+    "helvetica",
+    "bold"
+);
+
+doc.setFontSize(13);
+
+doc.setTextColor(
+    46,
+    125,
+    50
+);
+
+doc.text(
+    "Expense Details",
+    17,
+    159
+);
 
     /* TABLE DATA */
 
@@ -1587,53 +2014,190 @@ function exportPDF(){
         ]);
     });
 
-    doc.autoTable({
 
-        startY: 155,
+doc.autoTable({
 
-        head: [[
+    startY:165,
 
-            "Title",
+    margin:{
 
-            "Amount",
+        left:10,
 
-            "Category",
+        right:10
 
-            "Date"
+    },
 
-        ]],
+    tableWidth:"auto",
 
-        body: rows,
+    theme:"striped",
 
-        headStyles: {
+    head:[[
+        "Title",
+        "Amount",
+        "Category",
+        "Date"
+    ]],
 
-            fillColor: [
-                76,
-                175,
-                80
-            ]
+    body:rows,
+
+headStyles:{
+
+    fillColor:[
+        255,
+        183,
+        77
+    ],
+
+    textColor:255,
+
+    fontStyle:"bold",
+
+    fontSize:13,
+
+    cellPadding:3,
+
+    halign:"center",
+
+    valign:"middle",
+
+    lineWidth:0
+
+},
+
+    bodyStyles:{
+
+        textColor:60,
+
+        fontSize:9,
+
+        cellPadding:3,
+
+        valign:"middle"
+
+    },
+
+    alternateRowStyles:{
+
+        fillColor:[
+            247,
+            250,
+            247
+        ]
+
+    },
+
+styles:{
+
+    overflow:"linebreak",
+
+    lineWidth:0,
+
+    lineColor:[
+        255,
+        255,
+        255
+    ]
+
+},
+
+    columnStyles:{
+
+        0:{
+            cellWidth:70,
+            halign:"left"
+        },
+
+        1:{
+            cellWidth:35,
+            halign:"center"
+        },
+
+        2:{
+            cellWidth:45,
+            halign:"center"
+        },
+
+        3:{
+            cellWidth:40,
+            halign:"center"
         }
-    });
+
+    },
+
+    tableLineWidth:0,
+
+    tableLineColor:[
+        255,
+        255,
+        255
+    ],
+
+
+
+});
 
     /* FOOTER */
 
-    doc.setFontSize(10);
+const footerY =
+    doc.lastAutoTable.finalY + 18;
 
-    doc.setTextColor(120);
+doc.setDrawColor(
+    220,
+    220,
+    220
+);
 
-    doc.text(
+doc.line(
+    10,
+    footerY - 6,
+    200,
+    footerY - 6
+);
 
-        `Generated On: ${
-            new Date()
-            .toLocaleString()
-        }`,
+doc.setFont(
+    "helvetica",
+    "italic"
+);
 
-        14,
+doc.setFontSize(9);
 
-        doc.lastAutoTable.finalY + 15
+doc.setTextColor(120);
 
-    );
+doc.text(
 
+    `Generated on ${new Date().toLocaleString()}`,
+
+    12,
+
+    footerY
+
+);
+
+doc.text(
+
+    "ExpenseFlow • Version 1.0.0",
+
+    200,
+
+    footerY,
+
+    {
+
+        align:"right"
+
+    }
+
+);
+
+const totalPages = doc.getNumberOfPages();
+
+for(let page = 1; page <= totalPages; page++){
+
+    doc.setPage(page);
+
+    drawWatermark(doc);
+
+}
     /* SAVE */
 
     doc.save(
@@ -2316,3 +2880,33 @@ window.openProfile =
 
 window.closeProfile =
     closeProfile;
+
+function openAbout(){
+
+    document
+        .getElementById(
+            "aboutModal"
+        )
+        .classList.add(
+            "show"
+        );
+
+}
+
+function closeAbout(){
+
+    document
+        .getElementById(
+            "aboutModal"
+        )
+        .classList.remove(
+            "show"
+        );
+
+}
+
+window.openAbout =
+    openAbout;
+
+window.closeAbout =
+    closeAbout;

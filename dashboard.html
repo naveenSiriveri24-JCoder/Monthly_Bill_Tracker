@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monthly Bill Tracker</title>
+    <title>ExpenseFlow_DashBoard</title>
 
     <link
     id="themeStylesheet"
@@ -130,6 +130,14 @@
                 </label>
 
             </div>
+
+            <button
+                class="info-btn"
+                onclick="openAbout()">
+                
+                <i class="fa-solid fa-circle-info"></i>
+                    
+            </button>
 
         </div>
 
@@ -772,7 +780,70 @@
     </div>
 
 </div>
+<div id="aboutModal" class="about-modal">
 
+    <div class="about-card">
+
+        <span
+            class="close-about"
+            onclick="closeAbout()">
+
+            &times;
+
+        </span>
+
+        <i class="fa-solid fa-wallet about-icon"></i>
+
+        <h2>ExpenseFlow</h2>
+
+        <p class="version">
+
+            Version 1.0.0
+
+        </p>
+
+        <hr>
+
+        <p>
+
+            ExpenseFlow helps you manage
+            daily expenses with beautiful
+            dashboards, analytics and reports.
+
+        </p>
+
+        <div class="about-details">
+
+            <p><strong>Developer</strong><br>
+            Naveen Siriveri</p>
+
+            <p><strong>Technology</strong><br>
+            HTML • CSS • JavaScript • Firebase</p>
+
+            <p><strong>Features</strong><br>
+            ✓ Expense Tracking<br>
+            ✓ Dashboard Analytics<br>
+            ✓ Bill Image Upload<br>
+            ✓ PDF & CSV Export<br>
+            ✓ Dark Mode<br>
+            ✓ PWA Support<br>
+            ✓ Multi User Login</p>
+
+        </div>
+
+        <hr>
+
+        <p class="copyright">
+
+            © 2026 ExpenseFlow<br>
+
+            All Rights Reserved
+
+        </p>
+
+    </div>
+
+</div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script type="module" src="app.js?v=3.1.0"></script>
 
